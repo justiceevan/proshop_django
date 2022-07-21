@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'frontend.build',
 
     'rest_framework',
     'corsheaders',
@@ -192,7 +191,7 @@ MEDIA_ROOT = 'static/images/'
 
 STATIC_FILES_DIRS = [
     BASE_DIR / 'static',
-    BASE_DIR / 'frontend/build/static'
+
 ]
 
 # Default primary key field type
