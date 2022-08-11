@@ -28,10 +28,18 @@ SECRET_KEY = 'django-insecure-b=_49t9rfx%i(+=@r2sb_)%otz4&p579qp9d%$l-i#0x1-^2%*
 DEBUG = False
 
 ALLOWED_HOSTS = ['proshop-eshop.herokuapp.com',
-                 'localhost', '127.0.0.1']
+                 'localhost', '127.0.0.1'
+                 ]
 
 
 # Application definition
+
+"""
+'frontend.build',                               #46 - 48
+os.path.join(BASE_DIR, 'frontend/build'),       #118
+BASE_DIR / 'frontend/build/static'              #200
+
+"""
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -109,7 +117,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'frontend/build'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -185,7 +192,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = 'images/'
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_ROOT = 'static/images/'
 
