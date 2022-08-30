@@ -33,14 +33,6 @@ ALLOWED_HOSTS = ['proshop-eshop.herokuapp.com',
 
 
 # Application definition
-
-"""
-'frontend.build',                               #46 - 48
-os.path.join(BASE_DIR, 'frontend/build'),       #118
-BASE_DIR / 'frontend/build/static'              #200
-
-"""
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'frontend.build',
 
     'rest_framework',
     'corsheaders',
@@ -117,6 +110,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            os.path.join(BASE_DIR, 'frontend/build'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -198,7 +192,7 @@ MEDIA_ROOT = 'static/images/'
 
 STATIC_FILES_DIRS = [
     BASE_DIR / 'static',
-
+    BASE_DIR / 'frontend/build/static'
 ]
 
 # Default primary key field type
