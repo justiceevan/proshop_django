@@ -70,7 +70,7 @@
    python manage.py runserver
    ```
 
-- Open [http://localhost:3000](http://localhost:3000) on your browser to view the app.
+- Open [http://localhost:8000](http://localhost:8000) on your browser to view the app.
 
   ```
   use the superuser credentials to login to the admin panel
