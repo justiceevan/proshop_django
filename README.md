@@ -10,47 +10,68 @@
 
 1. Clone the repository
 
-```bash
-git clone git@github.com:justicenyaga/proshop.git && cd proshop
-```
+   ```bash
+   git clone https://github.com/justicenyaga/proshop.git && cd proshop
+   ```
 
 2. Create a virtual environment
 
-```bash
-python -m venv env
-```
+   ```bash
+   virtualenv -p python3 venv
+   ```
 
 3. Activate the virtual environment
 
-```bash
-source env/bin/activate
-```
+   ```bash
+   source venv/bin/activate
+   ```
 
 4. Install the dependencies
 
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 5. Create a .env file in the root directory and add the following environment variables
 
-```bash
-SECRET_KEY=your_secret_key
-DJANGO_ALLOWED_HOSTS=localhost
-DJANGO_DEBUG=True
-DJANGO_DATABASE_URL=postgres://user:password@localhost:5432/proshop
-```
+   ```
+   SECRET_KEY=your_secret_key
+   ALLOWED_HOSTS=localhost
+   DEVELOPEMENT_MODE=True
+   DEBUG=True
+   DATABASE_URL=postgres://user:password@localhost:5432/proshop
+   ```
 
-6. Create a superuser
+   ```
+   NB: The app uses sqlite3 database when DEVELOPEMENT_MODE is set to True
+   ```
 
-```bash
-python manage.py createsuperuser
-```
+6. Run the migrations
 
-7. Run the app
+   ```bash
+   python manage.py migrate
+   ```
 
-```bash
-python manage.py runserver
-```
+7. Load the initial data
 
-8. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   ```bash
+   python manage.py loaddata data.json
+   ```
+
+8. Create a superuser
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+9. Run the app
+
+   ```bash
+   python manage.py runserver
+   ```
+
+- Open [http://localhost:3000](http://localhost:3000) on your browser to view the app.
+
+  ```
+  use the superuser credentials to login to the admin panel
+  ```
