@@ -152,18 +152,6 @@ elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
         "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
     }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'proshop_database',
-#         'USER': 'postgres',
-#         'PASSWORD': 'letmein',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
