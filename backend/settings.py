@@ -48,10 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'frontend.build',
 
     'rest_framework',
     'corsheaders',
+    'storages',
+
+
+
+    'frontend.build',
 
     'base.apps.BaseConfig',
 ]
@@ -186,17 +190,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+
 STATIC_URL = 'static/'
-MEDIA_URL = 'images/'
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-MEDIA_ROOT = 'static/images/'
 
 STATIC_FILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
+
+if DEVELOPMENT_MODE is True:
+    MEDIA_URL = 'images/'
+    MEDIA_ROOT = 'static/images/'
+else:
+    from .cdn.conf import *  # noqa
+    MEDIA_URL = AWS_S3_ENDPOINT_URL + "/images/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
