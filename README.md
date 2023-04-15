@@ -2,7 +2,7 @@
 
 - This is a simple ecommerce web application running on Django backend, React frontend and a PostgreSQL database.
 
-- Click [here](https://pro-eshop.herokuapp.com) to open a live demo of the app.
+- The application is hosted on DigitalOcean and can be accessed through this [link](https://proshop-f46rm.ondigitalocean.app)
 
 - To run the app in development mode, you need to have Python 3.6 or higher installed on your machine.
 
