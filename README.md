@@ -39,11 +39,12 @@
    ALLOWED_HOSTS=localhost
    DEVELOPEMENT_MODE=True
    DEBUG=True
-   DATABASE_URL=postgres://user:password@localhost:5432/proshop
+   DATABASE_URL=postgres://user:password@localhost:5432/db_name
    ```
 
    ```
-   NB: The app uses sqlite3 database when DEVELOPEMENT_MODE is set to True
+   NB: The app uses sqlite3 database when DEVELOPEMENT_MODE is set to True and PostgreSQL 
+   database if DEVELOPMENT_MODE is set to False
    ```
 
 6. Run the migrations
