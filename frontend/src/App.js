@@ -2,6 +2,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useTheme, useMediaQuery } from "@mui/material";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -21,11 +22,15 @@ import ProductEditPage from "./pages/ProductEditPage";
 import OrderListPage from "./pages/OrderListPage";
 
 function App() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Router>
       <Header />
+
       <ToastContainer />
-      <main className="my-3">
+      <main className="my-3" style={isMobile ? { paddingTop: "4rem" } : {}}>
         <Container>
           <Routes>
             <Route path="/" element={<HomePage />} exact />
