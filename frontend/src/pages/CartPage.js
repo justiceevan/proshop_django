@@ -1,11 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Link,
-  useParams,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useTheme, useMediaQuery } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Row,
   Col,
@@ -15,23 +11,20 @@ import {
   Form,
   Card,
 } from "react-bootstrap";
+
 import Message from "../components/Message";
+
 import { addItemToCart, removeCartItem } from "../store/cart";
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  const { id: productId } = useParams();
-  const quantity = Number(searchParams.get("qty"));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const cartSlice = useSelector((state) => state.cart);
   const { cartItems } = cartSlice;
-
-  useEffect(() => {
-    if (productId) dispatch(addItemToCart(productId, quantity));
-  }, [dispatch, productId, quantity]);
 
   const handleRemoveCartItem = (id) => {
     dispatch(removeCartItem(id));
@@ -43,7 +36,7 @@ const CartPage = () => {
 
   return (
     <Row>
-      <h1>Shopping Cart</h1>
+      {cartItems.length === 0 && <h1>Shopping Cart</h1>}
       <Col md={8}>
         {cartItems.length === 0 ? (
           <Message variant="info">

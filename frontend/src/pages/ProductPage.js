@@ -9,10 +9,13 @@ import {
   Button,
   Form,
 } from "react-bootstrap";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+
+import { addItemToCart } from "../store/cart";
 import {
   getProductDetails,
   reviewProduct,
@@ -21,7 +24,7 @@ import {
 
 const ProductPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const { id: productId } = useParams();
 
   const [quantity, setQuantity] = useState(1);
@@ -52,7 +55,8 @@ const ProductPage = () => {
   }, [dispatch, productId, successReview]);
 
   const handleAddToCart = () => {
-    navigate(`/cart/${productId}?qty=${quantity}`);
+    dispatch(addItemToCart(productId, quantity));
+    toast.success("Item added to cart");
   };
 
   const handleSubmit = (e) => {
