@@ -4,6 +4,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useTheme, useMediaQuery } from "@mui/material";
 import Header from "./components/Header";
+import BottomBar from "./components/BottomBar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import ProductPage from "./pages/ProductPage";
@@ -30,7 +31,10 @@ function App() {
       <Header />
 
       <ToastContainer />
-      <main className="my-3" style={isMobile ? { paddingTop: "4rem" } : {}}>
+      <main
+        className="my-3"
+        style={isMobile ? { paddingTop: "4rem", paddingBottom: "4rem" } : {}}
+      >
         <Container>
           <Routes>
             <Route path="/" element={<HomePage />} exact />
@@ -52,7 +56,8 @@ function App() {
           </Routes>
         </Container>
       </main>
-      <Footer />
+
+      {isMobile ? <BottomBar /> : <Footer />}
     </Router>
   );
 }
