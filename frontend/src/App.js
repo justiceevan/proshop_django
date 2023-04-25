@@ -27,38 +27,40 @@ function App() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Router>
-      <Header />
+    <div style={{ backgroundColor: "#f8f8f8", minHeight: "100vh" }}>
+      <Router>
+        <Header />
 
-      <ToastContainer />
-      <main
-        className="my-3"
-        style={isMobile ? { paddingTop: "4rem", paddingBottom: "4rem" } : {}}
-      >
-        <Container>
-          <Routes>
-            <Route path="/" element={<HomePage />} exact />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/cart/:id" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/shipping" element={<ShippingPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/placeorder" element={<PlaceorderPage />} />
-            <Route path="/order/:id" element={<OrderPage />} />
-            <Route path="/admin/users" element={<UserListPage />} />
-            <Route path="/admin/users/:id" element={<UserEditPage />} />
-            <Route path="/admin/products" element={<ProductListPage />} />
-            <Route path="/admin/products/:id" element={<ProductEditPage />} />
-            <Route path="/admin/orders" element={<OrderListPage />} />
-          </Routes>
-        </Container>
-      </main>
+        <ToastContainer theme="colored" autoClose={2000} />
+        <main
+          className={isMobile ? "my-2" : "py-3"}
+          style={isMobile ? { paddingTop: "4rem", paddingBottom: "4rem" } : {}}
+        >
+          <Container>
+            <Routes>
+              <Route path="/" element={<HomePage />} exact />
+              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/cart/:id" element={<CartPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/shipping" element={<ShippingPage />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/placeorder" element={<PlaceorderPage />} />
+              <Route path="/order/:id" element={<OrderPage />} />
+              <Route path="/admin/users" element={<UserListPage />} />
+              <Route path="/admin/users/:id" element={<UserEditPage />} />
+              <Route path="/admin/products" element={<ProductListPage />} />
+              <Route path="/admin/products/:id" element={<ProductEditPage />} />
+              <Route path="/admin/orders" element={<OrderListPage />} />
+            </Routes>
+          </Container>
+        </main>
 
-      {isMobile ? <BottomBar /> : <Footer />}
-    </Router>
+        {isMobile ? <BottomBar /> : <Footer />}
+      </Router>
+    </div>
   );
 }
 
