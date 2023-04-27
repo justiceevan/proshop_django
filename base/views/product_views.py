@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
-from base.models import Product, Review
+from base.models import Product, Review, Category, SubCategory
 from base.serializer import ProductSerializer
 
 
@@ -18,8 +18,21 @@ def getProducts(request):
 
     products = Product.objects.filter(name__icontains=query)
 
-    print('query', query)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
 
+
+@api_view(['GET'])
+def getProductsByCategory(request, slug):
+    sub_categories = SubCategory.objects.filter(category__slug=slug)
+    products = Product.objects.filter(category__in=sub_categories)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getProductsBySubCategory(request, slug):
+    products = Product.objects.filter(category__slug=slug)
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
@@ -45,10 +58,12 @@ def updateProduct(request, pk):
 
     product = Product.objects.get(_id=pk)
 
+    category = SubCategory.objects.get(slug=data['category'])
+
     product.name = data['name']
     product.price = data['price']
     product.brand = data['brand']
-    product.category = data['category']
+    product.category = category
     product.countInStock = data['countInStock']
     product.description = data['description']
 
