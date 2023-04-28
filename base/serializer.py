@@ -48,6 +48,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
@@ -57,6 +58,14 @@ class ProductSerializer(serializers.ModelSerializer):
         reviews = obj.review_set.all()
         serializer = ReviewSerializer(reviews, many=True)
         return serializer.data
+
+    def get_category(self, obj):
+        if obj.category is not None:
+            return {
+                'name': obj.category.category.name,
+                'sub_category': obj.category.name,
+                'slug': obj.category.slug,
+            }
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
