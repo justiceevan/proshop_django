@@ -43,7 +43,6 @@ const slice = createSlice({
         (product) => product._id === action.payload._id
       );
       products.productsList[index] = action.payload;
-      window.location.reload();
     },
 
     createdProductRemoved: (products) => {
