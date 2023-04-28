@@ -83,7 +83,6 @@ def createProduct(request):
         name='Sample Name',
         description='',
         price=0,
-        category='Sample Category',
         brand='Sample Brand',
         countInStock=0,
     )
