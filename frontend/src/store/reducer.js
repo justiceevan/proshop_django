@@ -3,6 +3,8 @@ import { combineReducers } from "redux";
 import productsReducer from "./products";
 import productDetailsReducer from "./productDetails";
 
+import categoriesReducer from "./categories";
+
 import cartReducer from "./cart";
 
 import userReducer from "./user";
@@ -20,6 +22,7 @@ export default combineReducers({
   products: productsReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
+  categories: categoriesReducer,
   user: userReducer,
   userList: userListReducer,
   userDetails: userDetailsReducer,

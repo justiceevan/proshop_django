@@ -6,6 +6,14 @@ const cartItemsFromLocalStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
+const categories = localStorage.getItem("categories")
+  ? JSON.parse(localStorage.getItem("categories"))
+  : [];
+
+const subCategories = localStorage.getItem("subCategories")
+  ? JSON.parse(localStorage.getItem("subCategories"))
+  : [];
+
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -25,6 +33,10 @@ const initialState = {
     paymentMethod: paymentMethodFromLocalStorage,
   },
   user: { userInfo: userInfoFromLocalStorage },
+  categories: {
+    categoryList: categories,
+    subCategoryList: subCategories,
+  },
 };
 
 export default function () {
