@@ -96,6 +96,19 @@ def updateSubCategory(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+
+    sub_cat_id = data['sub_cat_id']
+    subCategory = SubCategory.objects.get(_id=sub_cat_id)
+
+    subCategory.image = request.FILES.get('image')
+    subCategory.save()
+
+    return Response('Image was uploaded')
+
+
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteSubCategory(request, pk):
