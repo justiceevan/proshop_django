@@ -11,6 +11,8 @@ urlpatterns = [
     path('subcategory/<str:slug>/', views.getProductsBySubCategory,
          name='subcategory-products'),
     path('<str:pk>/', views.getProduct, name='product'),
+    path('<str:pk>/incClicks/', views.incrementClickCount,
+         name='product-inc-clicks'),
     path('<str:pk>/reviews/', views.createProductReview, name='create-review'),
     path('<str:pk>/update/', views.updateProduct, name='product-update'),
     path('<str:pk>/delete/', views.deleteProduct, name='product-delete'),

@@ -87,6 +87,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 'name': obj.category.category.name,
                 'sub_category': obj.category.name,
                 'slug': obj.category.slug,
+                'cat_slug': obj.category.category.slug,
             }
 
 

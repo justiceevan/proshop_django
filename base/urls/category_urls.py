@@ -1,10 +1,12 @@
 from django.urls import path
 from base.views import category_views as views
+from base.views import product_views as product_views
 
 urlpatterns = [
     path('', views.getCategories, name='categories'),
     path('create/', views.createCategory, name='category-create'),
     path('sub/', views.getSubCategories, name='sub-categories'),
+    path('hot-categories/', product_views.getHotCategories, name='hot-categories'),
     path('upload/', views.uploadImage, name='image-upload'),
     path('sub/create/', views.createSubCategory, name='sub-category-create'),
     path('<str:pk>/', views.getCategory, name='category'),

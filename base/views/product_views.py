@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
-from base.models import Product, Review, Category, SubCategory
+from base.models import Product, Review, SubCategory
 from base.serializer import ProductSerializer
 
 
@@ -99,6 +99,42 @@ def deleteProduct(request, pk):
 
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+def incrementClickCount(request, pk):
+    product = Product.objects.get(_id=pk)
+    product.clickCount += 1
+    product.save()
+
+    return Response('Click count was incremented')
+
+
+@api_view(['GET'])
+def getHotCategories(request):
+    hot_categories = []
+    products = Product.objects.all()
+    categories = SubCategory.objects.all()
+
+    for category in categories:
+        category_clicks = 0
+        for product in products:
+            if product.category == category:
+                category_clicks += product.clickCount
+        hot_categories.append({
+            'category': category.name,
+            'main_category': category.category.name,
+            'main_category_slug': category.category.slug,
+            'slug': category.slug,
+            'image': category.image.url,
+            'clicks': category_clicks
+        })
+
+    # Sort by clicks in descending order and get top 10
+    hot_categories.sort(key=lambda x: x['clicks'], reverse=True)
+    hot_categories = hot_categories[:10]
+
+    return Response(hot_categories)
 
 
 @api_view(['POST'])
