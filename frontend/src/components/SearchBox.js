@@ -17,6 +17,7 @@ const SearchBox = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("md", "lg"));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,7 +30,10 @@ const SearchBox = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      style={{ width: isMobile || isTablet ? "80%" : "300px" }}
+    >
       <TextField
         type="search"
         className="me-2"
@@ -38,10 +42,12 @@ const SearchBox = () => {
         variant="outlined"
         placeholder="Looking for..."
         size="small"
+        fullWidth
         sx={{
           input: {
             color: "white",
           },
+          maxWidth: isMobile ? "100%" : "300px",
           "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "white",
           },
@@ -54,7 +60,7 @@ const SearchBox = () => {
             },
         }}
         InputProps={
-          isMobile
+          isMobile || isTablet
             ? {
                 endAdornment: (
                   <IconButton

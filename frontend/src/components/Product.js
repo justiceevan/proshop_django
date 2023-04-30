@@ -15,7 +15,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { grey } from "@mui/material/colors";
 import AddIcon from "@mui/icons-material/Add";
 import { toast } from "react-toastify";
 
@@ -29,14 +28,11 @@ const Product = ({ product }) => {
   const isNotPc = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { cartItems } = useSelector((state) => state.cart);
-  const { productsList } = useSelector((state) => state.products);
 
   const [quantityLoading, setQuantityLoading] = useState(false);
 
   const prodInCart = cartItems.find((item) => item.productId === product._id);
-  const productStock = productsList.find(
-    (item) => item._id === product._id
-  ).countInStock;
+  const productStock = product.countInStock;
 
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
@@ -139,7 +135,7 @@ const Product = ({ product }) => {
 
           <Stack spacing={0.5} my={1} direction="row">
             <Rating
-              value={product.rating}
+              value={Number(product.rating)}
               size="small"
               precision={0.5}
               readOnly
