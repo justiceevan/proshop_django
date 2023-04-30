@@ -6,6 +6,7 @@ const slice = createSlice({
   initialState: {
     categoryList: [],
     subCategoryList: [],
+    hotCategories: [],
     loading: false,
     error: null,
   },
@@ -34,6 +35,16 @@ const slice = createSlice({
       );
     },
 
+    hotCategoriesReceived: (categories, action) => {
+      categories.hotCategories = action.payload;
+      categories.loading = false;
+
+      localStorage.setItem(
+        "hotCategories",
+        JSON.stringify(categories.hotCategories)
+      );
+    },
+
     categoriesRequestFailed: (categories, action) => {
       categories.loading = false;
       categories.error = action.payload;
@@ -45,6 +56,7 @@ export const {
   categoriesRequested,
   categoriesReceived,
   subCategoriesReceived,
+  hotCategoriesReceived,
   categoriesRequestFailed,
 } = slice.actions;
 
@@ -70,6 +82,17 @@ export const loadSubCategories = () => (dispatch, getState) => {
       url: `${url}/sub/`,
       onStart: categoriesRequested.type,
       onSuccess: subCategoriesReceived.type,
+      onError: categoriesRequestFailed.type,
+    })
+  );
+};
+
+export const loadHotCategories = () => (dispatch, getState) => {
+  return dispatch(
+    apiCallBegun({
+      url: `${url}/hot-categories/`,
+      onStart: categoriesRequested.type,
+      onSuccess: hotCategoriesReceived.type,
       onError: categoriesRequestFailed.type,
     })
   );

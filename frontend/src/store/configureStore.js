@@ -14,6 +14,10 @@ const subCategories = localStorage.getItem("subCategories")
   ? JSON.parse(localStorage.getItem("subCategories"))
   : [];
 
+const hotCategories = localStorage.getItem("hotCategories")
+  ? JSON.parse(localStorage.getItem("hotCategories"))
+  : [];
+
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -36,6 +40,7 @@ const initialState = {
   categories: {
     categoryList: categories,
     subCategoryList: subCategories,
+    hotCategories: hotCategories,
   },
 };
 
