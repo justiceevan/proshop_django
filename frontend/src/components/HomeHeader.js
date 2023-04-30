@@ -41,7 +41,6 @@ const HomeHeader = () => {
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
-  const isTablet = useMediaQuery(theme.breakpoints.between("md", "lg"));
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
@@ -89,9 +88,11 @@ const HomeHeader = () => {
   const handleCategoryMouseLeave = (event) => {
     const isInsideCategory =
       event.relatedTarget &&
+      event.relatedTarget.closest &&
       event.relatedTarget.closest(".MuiList-root") !== null;
     const isInsideSubCategory =
       event.relatedTarget &&
+      event.relatedTarget.closest &&
       event.relatedTarget.closest(".MuiPaper-root") !== null;
     const isInitialHover =
       !event.target.matches(".MuiListItem-root") &&
@@ -116,9 +117,11 @@ const HomeHeader = () => {
   const handleSubCategoryMouseLeave = (event) => {
     const isInsideSubCategory =
       event.relatedTarget &&
+      event.relatedTarget.closest &&
       event.relatedTarget.closest(".MuiPaper-root") !== null;
     const isInsideCategory =
       event.relatedTarget &&
+      event.relatedTarget.closest &&
       event.relatedTarget.closest(".MuiList-root") !== null;
     const isInitialHover =
       !event.target.matches(".MuiListItem-root") &&
