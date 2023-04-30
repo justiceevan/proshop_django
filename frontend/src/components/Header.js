@@ -30,6 +30,9 @@ import { grey } from "@mui/material/colors";
 import SearchBox from "./SearchBox";
 
 import { logout } from "../store/user";
+import CategoryDrawer from "./CategoryDrawer";
+
+import { calculateToolbarPadding } from "../utils/toolBarPadding";
 
 const useStyles = makeStyles({
   popOverRoot: {
@@ -46,6 +49,10 @@ function Header() {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+  const width = window.innerWidth;
+
+  const toolBarPadding = calculateToolbarPadding(width);
 
   const { userInfo } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
@@ -130,43 +137,47 @@ function Header() {
   return (
     <AppBar
       position={isMobile ? "fixed" : "static"}
-      sx={
-        isMobile
-          ? { bgcolor: grey[800] }
-          : { paddingX: "100px", bgcolor: grey[800] }
-      }
+      sx={{
+        bgcolor: grey[800],
+        px: isMobile ? 0 : toolBarPadding,
+      }}
     >
       <Toolbar>
         <Stack
           direction="row"
           alignItems="center"
+          display="flex"
           justifyContent="space-between"
           color="inherit"
-          sx={isMobile ? { width: "100%" } : {}}
+          width={isMobile ? "100%" : "auto"}
         >
-          <IconButton onClick={() => navigate("/")} edge="start">
-            <img
-              src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
-              alt="logo"
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-              }}
-            />
-          </IconButton>
+          <Stack direction="row">
+            {!isDesktop && <CategoryDrawer />}
 
-          {!isMobile && (
-            <Button color="inherit" component={Link} to="/" className="me-3">
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{ flexGrow: 1, fontWeight: "550" }}
-              >
-                ProShop
-              </Typography>
-            </Button>
-          )}
+            <IconButton onClick={() => navigate("/")} edge="start">
+              <img
+                src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
+                alt="logo"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                }}
+              />
+            </IconButton>
+
+            {!isMobile && (
+              <Button color="inherit" component={Link} to="/" className="me-3">
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ flexGrow: 1, fontWeight: "550" }}
+                >
+                  ProShop
+                </Typography>
+              </Button>
+            )}
+          </Stack>
 
           <SearchBox />
         </Stack>

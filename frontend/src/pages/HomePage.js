@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+
 import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import ProductCarousel from "../components/ProductCarousel";
 import HomeHeader from "../components/HomeHeader";
+
 import { loadProducts } from "../store/products";
 
 const HomePage = () => {
@@ -28,10 +29,7 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* {!searchQuery && <ProductCarousel />} */}
       <HomeHeader />
-
-      <h1>Latest Products</h1>
 
       {loading ? (
         <Loader />
@@ -47,6 +45,8 @@ const HomePage = () => {
               paddingBottom: 1,
               paddingRight: 1,
               borderRadius: "5px",
+              boxShadow: 1,
+              marginTop: 2,
             }}
           >
             {products.map((product) => (

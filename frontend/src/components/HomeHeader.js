@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -9,7 +10,10 @@ import {
   Divider,
   Box,
   ListItem,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import SpaIcon from "@mui/icons-material/SpaOutlined";
 import CoffeeMakerIcon from "@mui/icons-material/CoffeeMakerOutlined";
 import MicrowaveIcon from "@mui/icons-material/MicrowaveOutlined";
@@ -25,33 +29,107 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import CategoryListItem from "./CategoryListItem";
 import HotCategoryGridItem from "./HotCategoryGridItem";
 
-import { loadTopRatedProducts } from "../store/products";
+import {
+  loadCategories,
+  loadSubCategories,
+  loadHotCategories,
+} from "../store/categories";
 
 const HomeHeader = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("md", "lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
-    dispatch(loadTopRatedProducts());
+    dispatch(loadCategories());
+    dispatch(loadSubCategories());
+    dispatch(loadHotCategories());
   }, [dispatch]);
 
   const [activeCategory, setActiveCategory] = useState(null);
+
+  const {
+    categoryList: categories,
+    subCategoryList: subCategories,
+    hotCategories,
+  } = useSelector((state) => state.categories);
+
+  const subCategoriesInActiveCategory = subCategories.filter(
+    (sub_cat) => sub_cat.category.slug === activeCategory
+  );
+
+  // sort based on clicks
+  const sortedHot = [...hotCategories].sort((a, b) => b.clicks - a.clicks);
+
+  // show only 8 hot categories on mobile
+  const filteredHot = isMobile ? sortedHot.slice(0, 8) : sortedHot;
+
+  // Temporary solution - (Static data)
+  const categoryIcons = {
+    "health-beauty": <SpaIcon fontSize="small" />,
+    "home-office": <CoffeeMakerIcon fontSize="small" />,
+    appliances: <MicrowaveIcon fontSize="small" />,
+    "phones-tablets": <SmartphoneIcon fontSize="small" />,
+    computing: <DevicesIcon fontSize="small" />,
+    "tvs-audios": <LiveTvIcon fontSize="small" />,
+    fashion: <CheckroomIcon fontSize="small" />,
+    "baby-products": <ChildCareIcon fontSize="small" />,
+    gaming: <SportsEsportsIcon fontSize="small" />,
+    sporting: <FitnessCenterIcon fontSize="small" />,
+  };
 
   const handleCategoryHover = (category) => {
     setActiveCategory(category);
   };
 
-  const handleCategoryLeave = () => {
-    setActiveCategory(null);
+  const handleCategoryMouseLeave = (event) => {
+    const isInsideCategory =
+      event.relatedTarget &&
+      event.relatedTarget.closest(".MuiList-root") !== null;
+    const isInsideSubCategory =
+      event.relatedTarget &&
+      event.relatedTarget.closest(".MuiPaper-root") !== null;
+    const isInitialHover =
+      !event.target.matches(".MuiListItem-root") &&
+      !event.target.matches(".MuiPaper-root");
+    if (!isInsideCategory && !isInsideSubCategory && !isInitialHover) {
+      setActiveCategory(null);
+    }
   };
 
-  return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={{
-        height: "295px",
-      }}
-    >
+  const handleCategoryClick = (slug) => {
+    navigate(`/${slug}`);
+  };
+
+  const handleSubCategoryClick = (slug) => {
+    navigate(`/category/${slug}`);
+  };
+
+  const handleClickHotCategory = (slug) => {
+    navigate(`/category/${slug}`);
+  };
+
+  const handleSubCategoryMouseLeave = (event) => {
+    const isInsideSubCategory =
+      event.relatedTarget &&
+      event.relatedTarget.closest(".MuiPaper-root") !== null;
+    const isInsideCategory =
+      event.relatedTarget &&
+      event.relatedTarget.closest(".MuiList-root") !== null;
+    const isInitialHover =
+      !event.target.matches(".MuiListItem-root") &&
+      !event.target.matches(".MuiPaper-root");
+    if (!isInsideSubCategory && !isInsideCategory && !isInitialHover) {
+      setActiveCategory(null);
+    }
+  };
+
+  const CategoriesComponent = () => {
+    return (
       <Stack direction="row" width="40%">
         <List
           sx={{
@@ -62,117 +140,73 @@ const HomeHeader = () => {
               paddingBottom: 0.5,
             },
           }}
+          onMouseLeave={handleCategoryMouseLeave}
           component={Paper}
         >
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Health & Beauty"}
-            label={"Health & Beauty"}
-          >
-            <SpaIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Home & Office"}
-            label={"Home & Office"}
-          >
-            <CoffeeMakerIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Appliances"}
-            label={"Appliances"}
-          >
-            <MicrowaveIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Phones & Tablets"}
-            label={"Phones & Tablets"}
-          >
-            <SmartphoneIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Computing"}
-            label={"Computing"}
-          >
-            <DevicesIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"TVs & Audio"}
-            label={"TVs & Audio"}
-          >
-            <LiveTvIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Fashion"}
-            label={"Fashion"}
-          >
-            <CheckroomIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Gaming"}
-            label={"Gaming"}
-          >
-            <SportsEsportsIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Baby Products"}
-            label={"Baby Products"}
-          >
-            <ChildCareIcon fontSize="small" />
-          </CategoryListItem>
-
-          <CategoryListItem
-            onMouseEnter={() => handleCategoryHover("Health)")}
-            onMouseLeave={() => handleCategoryLeave()}
-            category={"Sporting Goods"}
-            label={"Sporting Goods"}
-          >
-            <FitnessCenterIcon fontSize="small" />
-          </CategoryListItem>
+          {categories.map((category) => {
+            return (
+              <CategoryListItem
+                key={category.slug}
+                onMouseEnter={() => handleCategoryHover(category.slug)}
+                category={category.slug}
+                activeCategory={activeCategory}
+                label={category.name}
+                categoryIcon={categoryIcons[category.slug]}
+                onClick={() => handleCategoryClick(category.slug)}
+              />
+            );
+          })}
         </List>
+
         <Divider orientation="vertical" flexItem />
 
         {activeCategory && (
-          <Paper sx={{ width: "50%" }}>
-            <List>
-              <ListItem>Tada</ListItem>
-              <ListItem>Tada</ListItem>
-            </List>
-          </Paper>
+          <List
+            sx={{
+              width: "50%",
+              cursor: "pointer",
+              "& .MuiListItem-root": {
+                py: 0,
+              },
+            }}
+            onMouseLeave={handleSubCategoryMouseLeave}
+            component={Paper}
+          >
+            {subCategoriesInActiveCategory.map((subCategory) => {
+              return (
+                <ListItem
+                  key={subCategory.slug}
+                  sx={{
+                    "&:hover": {
+                      "& .MuiTypography-root": {
+                        color: grey[400],
+                      },
+                    },
+                  }}
+                  onClick={() => handleSubCategoryClick(subCategory.slug)}
+                >
+                  <Typography variant="body1" sx={{ fontSize: 14 }}>
+                    {subCategory.name}
+                  </Typography>
+                </ListItem>
+              );
+            })}
+          </List>
         )}
       </Stack>
+    );
+  };
 
+  const HotCategoriesComponent = () => {
+    return (
       <Box
         sx={{
-          width: "80%",
+          width: isDesktop ? "80%" : "100%",
           bgcolor: "white",
           padding: 1,
           borderRadius: "5px",
           visibility: "visible",
+          boxShadow: 1,
         }}
       >
         <Stack direction="row" spacing={1} paddingTop={1}>
@@ -201,8 +235,8 @@ const HomeHeader = () => {
               height: "50%",
               padding: 2,
               "&:hover": {
-                elevation: 1,
-                boxShadow: 1,
+                elevation: 3,
+                boxShadow: 3,
                 transform: "scale(1.02)",
               },
               display: "flex",
@@ -213,57 +247,29 @@ const HomeHeader = () => {
             },
           }}
         >
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/laptops.jpg"
-            label="Laptops"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/phones.jpg"
-            label="Phones"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/tvs.webp"
-            label="TVs"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/kitchen.png"
-            label="Kitchen"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/home.webp"
-            label="Home"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/shoes.webp"
-            label="Shoes"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/fifa23.png"
-            label="Games"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/home-audio.png"
-            label="Audio"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/skin-care.webp"
-            label="Skin care"
-          />
-
-          <HotCategoryGridItem
-            image="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/categories/fitness.jpg"
-            label="Fitness"
-          />
+          {filteredHot.map((item) => (
+            <HotCategoryGridItem
+              onClick={() => handleClickHotCategory(item.slug)}
+              key={item.slug}
+              image={item.image}
+              label={item.category}
+            />
+          ))}
         </Grid>
       </Box>
+    );
+  };
+
+  return (
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        height: "295px",
+      }}
+    >
+      {isDesktop && <CategoriesComponent />}
+      <HotCategoriesComponent />
     </Stack>
   );
 };

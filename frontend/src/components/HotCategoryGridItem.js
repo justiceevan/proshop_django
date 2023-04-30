@@ -1,8 +1,17 @@
-import { Grid, Stack, Typography } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 
 const HotCategoryGridItem = ({ image, label, onClick }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <Grid item component={Stack} onClick={onClick}>
+    <Grid item component={Stack} onClick={onClick} xs={isMobile ? 3 : 0}>
       <Stack
         direction="column"
         spacing={1}

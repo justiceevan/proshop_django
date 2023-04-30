@@ -5,10 +5,11 @@ import { grey } from "@mui/material/colors";
 
 const CategoryListItem = ({
   category,
-  children,
+  categoryIcon,
   label,
+  activeCategory,
   onMouseEnter,
-  onMouseLeave,
+  onClick,
 }) => {
   return (
     <ListItem
@@ -21,16 +22,22 @@ const CategoryListItem = ({
             color: grey[400],
           },
         },
+        "& .MuiSvgIcon-root": {
+          color: activeCategory === category ? grey[400] : "inherit",
+        },
+        "& .MuiTypography-root": {
+          color: activeCategory === category ? grey[400] : "inherit",
+        },
       }}
       onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onClick={onClick}
     >
       <Link
         to={`/category?query=${category}`}
         style={{ textDecoration: "none" }}
       >
         <Stack direction="row" spacing={0.5}>
-          {children}
+          {categoryIcon}
           <Typography variant="body1" sx={{ fontSize: 13, fontWeight: 500 }}>
             {label}
           </Typography>
