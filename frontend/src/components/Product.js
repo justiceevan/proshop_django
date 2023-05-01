@@ -44,7 +44,7 @@ const Product = ({ product }) => {
     setQuantityLoading(true);
     setTimeout(() => {
       setQuantityLoading(false);
-    }, 1500);
+    }, 600);
 
     const quantity = 1;
     if (quantity > productStock) {
@@ -61,7 +61,7 @@ const Product = ({ product }) => {
     setQuantityLoading(true);
     setTimeout(() => {
       setQuantityLoading(false);
-    }, 1500);
+    }, 800);
 
     const quantity = prodInCart.quantity + 1;
     if (quantity > productStock) {
@@ -78,7 +78,7 @@ const Product = ({ product }) => {
     setQuantityLoading(true);
     setTimeout(() => {
       setQuantityLoading(false);
-    }, 1500);
+    }, 800);
 
     const quantity = prodInCart.quantity - 1;
     if (quantity === 0) {

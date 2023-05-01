@@ -57,6 +57,9 @@ function Header() {
   const { userInfo } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
 
+  let totalItemsInCart = 0;
+  cartItems.map((item) => (totalItemsInCart += Number(item.quantity)));
+
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -201,7 +204,7 @@ function Header() {
                 }}
                 size="small"
               >
-                <Badge badgeContent={cartItems.length} color="error">
+                <Badge badgeContent={totalItemsInCart} color="error">
                   <Stack direction="row" spacing={0.5}>
                     <ShoppingCartIcon fontSize="small" />
                     <Typography

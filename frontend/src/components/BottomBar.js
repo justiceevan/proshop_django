@@ -33,6 +33,9 @@ function BottomBar() {
   const { userInfo } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
 
+  let totalItemsInCart = 0;
+  cartItems.map((item) => (totalItemsInCart += Number(item.quantity)));
+
   const hash = window.location.hash;
   let path = hash.split("#")[1];
   if (!path) {
@@ -114,7 +117,7 @@ function BottomBar() {
       <BottomNavigationAction
         label="Cart"
         icon={
-          <Badge badgeContent={cartItems.length} color="error">
+          <Badge badgeContent={totalItemsInCart} color="error">
             <ShoppingCartIcon fontSize="small" />
           </Badge>
         }
