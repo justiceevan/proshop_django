@@ -4,10 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   IconButton,
-  Button,
   InputAdornment,
   Typography,
-  CircularProgress,
   Stack,
   useTheme,
   useMediaQuery,
@@ -201,32 +199,25 @@ const ProductEditPage = () => {
           helperText={uploadHelperText && uploadHelperText}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <Button
+              <InputAdornment position="end" sx={{ marginRight: "-10px" }}>
+                <LoadingButton
                   variant="contained"
-                  component="label"
+                  loading={uploading}
+                  loadingPosition="start"
                   color="inherit"
-                  disabled={uploading}
+                  component="label"
+                  startIcon={<FileUploadIcon />}
+                  sx={{ fontWeight: 550, marginRight: 0 }}
                 >
-                  {uploading ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    <Stack direction="row" spacing={1}>
-                      <FileUploadIcon fontSize="small" />
-                      {!isMobile && (
-                        <Typography sx={{ fontSize: 12, fontWeight: 550 }}>
-                          Upload
-                        </Typography>
-                      )}
-                    </Stack>
-                  )}
+                  {isMobile ? "" : "Upload"}
+
                   <input
                     type="file"
                     hidden
                     onChange={handleUploadFile}
                     accept="image/*"
                   />
-                </Button>
+                </LoadingButton>
               </InputAdornment>
             ),
           }}

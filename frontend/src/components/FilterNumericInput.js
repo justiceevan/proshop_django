@@ -31,16 +31,6 @@ const FilterNumericInput = ({
     }
   };
 
-  // const handleKeyDown = (event) => {
-  //   if (event.key === "ArrowUp") {
-  //     event.preventDefault();
-  //     setValue(parseFloat(value) + step);
-  //   } else if (event.key === "ArrowDown") {
-  //     event.preventDefault();
-  //     setValue(parseFloat(value) - step);
-  //   }
-  // };
-
   const handleKeyDown = (event) => {
     if (event.key === "ArrowUp") {
       event.preventDefault();

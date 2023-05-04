@@ -27,7 +27,7 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 import CategoryListItem from "./CategoryListItem";
-import HotCategoryGridItem from "./HotCategoryGridItem";
+import CategoryGridItem from "./CategoryGridItem";
 
 import {
   loadCategories,
@@ -35,7 +35,7 @@ import {
   loadHotCategories,
 } from "../store/categories";
 
-const HomeHeader = () => {
+const HomePageHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -106,12 +106,12 @@ const HomeHeader = () => {
     navigate(`/${slug}`);
   };
 
-  const handleSubCategoryClick = (slug) => {
-    navigate(`/category/${slug}`);
+  const handleSubCategoryClick = (main_category, slug) => {
+    navigate(`/${main_category}/${slug}`);
   };
 
-  const handleClickHotCategory = (slug) => {
-    navigate(`/category/${slug}`);
+  const handleClickHotCategory = (main_category, slug) => {
+    navigate(`/${main_category}/${slug}`);
   };
 
   const handleSubCategoryMouseLeave = (event) => {
@@ -186,7 +186,12 @@ const HomeHeader = () => {
                       },
                     },
                   }}
-                  onClick={() => handleSubCategoryClick(subCategory.slug)}
+                  onClick={() =>
+                    handleSubCategoryClick(
+                      subCategory.category.slug,
+                      subCategory.slug
+                    )
+                  }
                 >
                   <Typography variant="body1" sx={{ fontSize: 14 }}>
                     {subCategory.name}
@@ -251,8 +256,10 @@ const HomeHeader = () => {
           }}
         >
           {filteredHot.map((item) => (
-            <HotCategoryGridItem
-              onClick={() => handleClickHotCategory(item.slug)}
+            <CategoryGridItem
+              onClick={() =>
+                handleClickHotCategory(item.main_category_slug, item.slug)
+              }
               key={item.slug}
               image={item.image}
               label={item.category}
@@ -277,4 +284,4 @@ const HomeHeader = () => {
   );
 };
 
-export default HomeHeader;
+export default HomePageHeader;

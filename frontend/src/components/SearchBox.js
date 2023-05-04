@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
   IconButton,
   TextField,
-  Typography,
   Button,
   useTheme,
   useMediaQuery,
@@ -81,20 +80,14 @@ const SearchBox = () => {
                     type="submit"
                     sx={{
                       transform: "translateX(10px)",
+                      fontWeight: 550,
+                      fontSize: 12,
                     }}
                     color="success"
                     variant="contained"
+                    startIcon={<SearchIcon fontSize="small" />}
                   >
-                    <SearchIcon fontSize="small" />
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: "550",
-                      }}
-                    >
-                      Search
-                    </Typography>
+                    Search
                   </Button>
                 ),
               }

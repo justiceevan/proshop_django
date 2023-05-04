@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { toast } from "react-toastify";
 
 import { addItemToCart, removeCartItem } from "../store/cart";
@@ -26,6 +27,7 @@ const Product = ({ product }) => {
 
   const theme = useTheme();
   const isNotPc = useMediaQuery(theme.breakpoints.down("lg"));
+  const width = window.innerWidth;
 
   const { cartItems } = useSelector((state) => state.cart);
 
@@ -96,16 +98,17 @@ const Product = ({ product }) => {
         margin: 0,
         cursor: "pointer",
         "&:hover": {
-          boxShadow: 3,
+          boxShadow: 4,
           transform: "scale(1.02)",
           "& .MuiButton-root": {
             visibility: "visible",
           },
         },
       }}
+      boxShadow={1}
       onClick={handleCardClick}
     >
-      <Card sx={{ margin: 0, height: "348px" }}>
+      <Card sx={{ margin: 0, height: "355px" }}>
         <CardMedia
           component="img"
           height="180px"
@@ -209,12 +212,17 @@ const Product = ({ product }) => {
               color="inherit"
               sx={{
                 width: "100%",
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: 550,
                 marginTop: 1,
                 visibility: isNotPc ? "visible" : "hidden",
               }}
               onClick={handleAddToCart}
+              endIcon={
+                width < 368 || (width >= 1200 && width < 1400) ? null : (
+                  <AddShoppingCartIcon fontSize="small" />
+                )
+              }
             >
               Add to Cart
             </Button>
@@ -223,30 +231,6 @@ const Product = ({ product }) => {
       </Card>
     </Box>
   );
-  // return (
-  //   <Card className="my-3 p-3 rounded">
-  //     <Link to={`/product/${product._id}`}>
-  //       <Card.Img src={product.image} alt={product.name} />
-  //     </Link>
-  //     <Card.Body>
-  //       <Link to={`/product/${product._id}`}>
-  //         <Card.Title as="div">
-  //           <strong>{product.name}</strong>
-  //         </Card.Title>
-  //       </Link>
-  //       <Card.Text as="div">
-  //         <div className="my-3">
-  //           <Rating
-  //             value={product.rating}
-  //             text={`${product.numReviews} reviews`}
-  //             color="#ffc107"
-  //           />
-  //         </div>
-  //       </Card.Text>
-  //       <Card.Text as="h3">${product.price}</Card.Text>
-  //     </Card.Body>
-  //   </Card>
-  // );
 };
 
 export default Product;

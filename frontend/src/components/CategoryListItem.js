@@ -36,7 +36,7 @@ const CategoryListItem = ({
         to={`/category?query=${category}`}
         style={{ textDecoration: "none" }}
       >
-        <Stack direction="row" spacing={0.5}>
+        <Stack direction="row" spacing={1}>
           {categoryIcon}
           <Typography variant="body1" sx={{ fontSize: 13, fontWeight: 500 }}>
             {label}

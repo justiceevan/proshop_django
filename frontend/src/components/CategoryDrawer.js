@@ -87,18 +87,11 @@ const CategoryDrawer = () => {
             }}
             sx={{
               justifyContent: "flex-start",
+              color: "black",
+              fontSize: 20,
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: "550",
-                textAlign: "left",
-                fontSize: 18,
-              }}
-            >
-              PROSHOP
-            </Typography>
+            PROSHOP
           </Button>
         </Stack>
 
@@ -115,8 +108,9 @@ const CategoryDrawer = () => {
             sx={{
               textAlign: "center",
               paddingTop: 1,
-              fontWeight: "bold",
-              fontSize: 14,
+              fontWeight: 550,
+              fontSize: 12,
+              color: "black",
             }}
             component="h6"
           >

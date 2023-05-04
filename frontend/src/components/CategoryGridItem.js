@@ -6,7 +6,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-const HotCategoryGridItem = ({ image, label, onClick }) => {
+const CategoryGridItem = ({ image, label, onClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -43,4 +43,4 @@ const HotCategoryGridItem = ({ image, label, onClick }) => {
   );
 };
 
-export default HotCategoryGridItem;
+export default CategoryGridItem;

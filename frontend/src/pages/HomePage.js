@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import HomeHeader from "../components/HomeHeader";
+import HomePageHeader from "../components/HomePageHeader";
 
 import { loadProducts } from "../store/products";
 
@@ -21,7 +21,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <HomeHeader />
+      <HomePageHeader />
 
       {loading ? (
         <Loader />
@@ -37,7 +37,7 @@ const HomePage = () => {
               paddingBottom: 1,
               paddingRight: 1,
               borderRadius: "5px",
-              boxShadow: 1,
+              boxShadow: 3,
               marginTop: 2,
             }}
           >

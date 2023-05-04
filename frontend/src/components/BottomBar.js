@@ -8,9 +8,6 @@ import {
   Avatar,
   Divider,
   Menu,
-  MenuItem,
-  Stack,
-  Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -22,7 +19,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import UsersIcon from "@mui/icons-material/PeopleAlt";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import OrdersIcon from "@mui/icons-material/LocalShipping";
-import { grey } from "@mui/material/colors";
+
+import NavMenuItem from "./NavMenuItem";
 
 import { logout } from "../store/user";
 
@@ -94,10 +92,6 @@ function BottomBar() {
   return (
     <BottomNavigation
       sx={{
-        width: "100%",
-        position: "fixed",
-        bottom: 0,
-        bgcolor: grey[800],
         "& .MuiBottomNavigationAction-root.Mui-selected": {
           color: "white",
         },
@@ -112,7 +106,6 @@ function BottomBar() {
         label="Home"
         icon={<HomeIcon fontSize="small" />}
         onClick={() => navigate("/")}
-        sx={{ color: grey[500] }}
       />
       <BottomNavigationAction
         label="Cart"
@@ -122,7 +115,6 @@ function BottomBar() {
           </Badge>
         }
         onClick={() => navigate("/cart")}
-        sx={{ color: grey[500] }}
       />
 
       {userInfo && userInfo.isAdmin && (
@@ -130,7 +122,6 @@ function BottomBar() {
           label="Admin"
           icon={<AdminIcon fontSize="small" />}
           onClick={handleAdminClick}
-          sx={{ color: grey[500] }}
         />
       )}
 
@@ -142,14 +133,12 @@ function BottomBar() {
               {userInfo.name.split(" ").map((name) => name[0])}
             </Avatar>
           }
-          sx={{ color: grey[500] }}
         />
       ) : (
         <BottomNavigationAction
           label="Account"
           icon={<PersonIcon fontSize="small" />}
           onClick={handleAccountClick}
-          sx={{ color: grey[500] }}
         />
       )}
 
@@ -157,204 +146,83 @@ function BottomBar() {
         anchorEl={profileAnchorEl}
         open={Boolean(profileAnchorEl)}
         onClose={handleCloseProfile}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
         getContentAnchorEl={null}
-        sx={{
-          "& .MuiMenu-paper": { bgcolor: grey[500], color: "white" },
-          "& .MuiMenu-list": { padding: "0", margin: "0" },
-        }}
       >
-        <MenuItem
-          onClick={() => {
-            navigate("/profile");
-            handleCloseProfile();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <PersonIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Profile
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Profile"
+          icon={<PersonIcon fontSize="small" />}
+          route="/profile"
+          handleClose={handleCloseProfile}
+          props={{ dense: true }}
+        />
         <Divider sx={{ margin: "0" }} />
-        <MenuItem
-          onClick={() => {
-            handleLogout();
-            handleCloseProfile();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <LogoutIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Logout
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Logout"
+          icon={<LogoutIcon fontSize="small" />}
+          onClick={handleLogout}
+          handleClose={handleCloseProfile}
+          props={{ dense: true }}
+        />
       </Menu>
 
       <Menu
         anchorEl={adminAnchorEl}
         open={Boolean(adminAnchorEl)}
         onClose={handleCloseAdmin}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
         getContentAnchorEl={null}
-        sx={{
-          "& .MuiMenu-paper": { bgcolor: grey[500], color: "white" },
-          "& .MuiMenu-list": { padding: "0", margin: "0" },
-        }}
       >
-        <MenuItem
-          onClick={() => {
-            navigate("/admin/users");
-            handleCloseAdmin();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <UsersIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Users
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Users"
+          icon={<UsersIcon fontSize="small" />}
+          route="/admin/users"
+          handleClose={handleCloseAdmin}
+          props={{ dense: true }}
+        />
         <Divider sx={{ margin: "0" }} />
-        <MenuItem
-          onClick={() => {
-            navigate("/admin/products");
-            handleCloseAdmin();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <ShoppingBasketIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Products
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Products"
+          icon={<ShoppingBasketIcon fontSize="small" />}
+          route="/admin/products"
+          handleClose={handleCloseAdmin}
+          props={{ dense: true }}
+        />
         <Divider sx={{ margin: "0" }} />
-        <MenuItem
-          onClick={() => {
-            navigate("/admin/orders");
-            handleCloseAdmin();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <OrdersIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Orders
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Orders"
+          icon={<OrdersIcon fontSize="small" />}
+          route="/admin/orders"
+          handleClose={handleCloseAdmin}
+          props={{ dense: true }}
+        />
       </Menu>
 
       <Menu
         anchorEl={accountAnchorEl}
         open={Boolean(accountAnchorEl)}
         onClose={handleCloseAccount}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
         getContentAnchorEl={null}
-        sx={{
-          "& .MuiMenu-paper": { bgcolor: grey[500], color: "white" },
-          "& .MuiMenu-list": { padding: "0", margin: "0" },
-        }}
       >
-        <MenuItem
-          onClick={() => {
-            navigate("/login");
-            handleCloseAccount();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <LoginIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Login
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Login"
+          icon={<LoginIcon fontSize="small" />}
+          route="/login"
+          handleClose={handleCloseAccount}
+          props={{ dense: true }}
+        />
         <Divider sx={{ margin: "0" }} />
-        <MenuItem
-          onClick={() => {
-            navigate("/register");
-            handleCloseAccount();
-          }}
-          dense
-        >
-          <Stack direction="row" spacing={0.5}>
-            <PersonAddIcon fontSize="small" />
-            <Typography
-              variant="body2"
-              sx={{
-                color: "white",
-                fontWeight: "550",
-              }}
-            >
-              Sign up
-            </Typography>
-          </Stack>
-        </MenuItem>
+        <NavMenuItem
+          label="Sign up"
+          icon={<PersonAddIcon fontSize="small" />}
+          route="/register"
+          handleClose={handleCloseAccount}
+          props={{ dense: true }}
+        />
       </Menu>
     </BottomNavigation>
   );

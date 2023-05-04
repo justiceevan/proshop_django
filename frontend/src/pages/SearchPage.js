@@ -337,7 +337,7 @@ const SearchPage = () => {
       ) : (
         <Stack
           direction={isDesktop ? "row" : "column"}
-          spacing={2}
+          spacing={1}
           sx={{ marginTop: isDesktop ? 2 : 0 }}
         >
           {!isDesktop && openFilters && (
@@ -371,7 +371,7 @@ const SearchPage = () => {
                 borderRadius: "5px",
                 minHeight: "50vh",
                 height: "fit-content",
-                width: isDesktop ? "23%" : "100%",
+                width: isDesktop ? "22%" : "100%",
               }}
               elevation={5}
             >
@@ -721,7 +721,7 @@ const SearchPage = () => {
                 bgcolor: "white",
                 padding: 2,
                 borderRadius: "5px",
-                width: isDesktop ? "77%" : "100%",
+                width: isDesktop ? "78%" : "100%",
                 height: isDesktop && "fit-content",
               }}
               component={Card}
