@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
 
 import Product from "../components/Product";
 import Loader from "../components/Loader";
@@ -12,20 +11,13 @@ import { loadProducts } from "../store/products";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
 
   const productsSlice = useSelector((state) => state.products);
   const { productsList: products, loading, error } = productsSlice;
 
-  const searchQuery = searchParams.get("q");
-
   useEffect(() => {
-    if (searchQuery) {
-      dispatch(loadProducts(searchQuery));
-    } else {
-      dispatch(loadProducts());
-    }
-  }, [dispatch, searchQuery]);
+    dispatch(loadProducts());
+  }, [dispatch]);
 
   return (
     <div>

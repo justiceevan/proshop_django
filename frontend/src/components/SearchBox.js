@@ -23,7 +23,7 @@ const SearchBox = () => {
     e.preventDefault();
 
     if (searchQuery) {
-      navigate(`/?q=${searchQuery}`);
+      navigate(`/search/?q=${searchQuery}`);
     } else {
       navigate(pathname);
     }
