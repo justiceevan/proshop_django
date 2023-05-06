@@ -25,6 +25,7 @@ const CategoryGridItem = ({ image, label, onClick }) => {
             width: "60px",
             borderRadius: "50%",
           }}
+          loading="lazy"
         />
         <Typography
           variant="subtitle1"

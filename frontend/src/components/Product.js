@@ -114,6 +114,7 @@ const Product = ({ product }) => {
           height="180px"
           image={product.image}
           alt={product.name}
+          loading="lazy"
         />
 
         <CardContent>

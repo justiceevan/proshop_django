@@ -13,6 +13,7 @@ const PageNotFound = () => {
         alt="404 Page Not Found"
         style={{ maxWidth: "60%", height: "auto" }}
         className="my-3"
+        loading="lazy"
       />
       <Typography variant="body2">
         The page you are looking for could not be found.
