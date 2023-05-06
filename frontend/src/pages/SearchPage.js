@@ -1,36 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import {
-  Card,
-  Grid,
-  List,
-  ListItem,
-  FormControlLabel,
-  Checkbox,
-  Stack,
-  Divider,
   Typography,
-  Slider,
   Button,
-  IconButton,
-  Alert,
   Box,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MinusIcon from "@mui/icons-material/Remove";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 
-import FilterNumericInput from "../components/FilterNumericInput";
-import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
 import { loadProducts } from "../store/products";
+import FilterComponent from "../components/FilterComponent";
 
 const SearchPage = () => {
   const dispatch = useDispatch();
@@ -42,29 +25,8 @@ const SearchPage = () => {
 
   const searchQuery = searchParams.get("q");
 
-  const [openFilters, setOpenFilters] = useState(false);
-
-  const [prices, setPrices] = useState([0, 0]);
-  const [filteredPrices, setFilteredPrices] = useState([0, 0]);
-  const [ratings, setRatings] = useState([0, 5]);
-  const [filteredRatings, setFilteredRatings] = useState([0, 5]);
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [products, setProducts] = useState([]);
-
   const productsSlice = useSelector((state) => state.products);
   const { productsList, loading, error } = productsSlice;
-
-  const min_price =
-    productsList.length &&
-    Number(
-      Math.min(...productsList.map((product) => product.price)).toFixed(2)
-    );
-  const max_price =
-    productsList.length &&
-    Number(
-      Math.max(...productsList.map((product) => product.price)).toFixed(2)
-    );
 
   const allCategories =
     productsList.length && productsList.map((product) => product.category);
@@ -90,199 +52,61 @@ const SearchPage = () => {
     });
   }
 
-  const isFilteredByCategory = categories.length;
-  const isFilteredByBrand = brands.length;
-
-  const filteredByPriceCondition1 =
-    filteredPrices[0] === 0 && filteredPrices[1] === 0;
-  const filteredByPriceCondition2 =
-    filteredPrices[0] === min_price && filteredPrices[1] === max_price;
-
-  const isFilteredByPrice =
-    filteredByPriceCondition1 || filteredByPriceCondition2 ? false : true;
-
-  const isFilteredByRating =
-    filteredRatings[0] === 0 && filteredRatings[1] === 5 ? false : true;
-
-  let selectedFilters = [];
-  if (isFilteredByCategory) selectedFilters.push("Category");
-  if (isFilteredByBrand) selectedFilters.push("Brand");
-  if (isFilteredByPrice) selectedFilters.push("Price");
-  if (isFilteredByRating) selectedFilters.push("Rating");
-
-  const handleCategoryChange = (event) => {
-    const index = categories.indexOf(event.target.value);
-
-    if (index === -1) setCategories([...categories, event.target.value]);
-    else
-      setCategories(
-        categories.filter((category) => category !== event.target.value)
-      );
-  };
-
-  const handleBrandChange = (event) => {
-    const index = brands.indexOf(event.target.value);
-
-    if (index === -1) setBrands([...brands, event.target.value]);
-    else setBrands(brands.filter((brand) => brand != event.target.value));
-  };
-
-  const handleSelectAllCategories = () => {
-    if (categories.length === uniqueCategories.length) {
-      setCategories([]);
-    } else {
-      setCategories(uniqueCategories.map((category) => category.name));
-    }
-  };
-
-  const handleSelectAllBrands = () => {
-    if (brands.length === uniqueBrands.length) {
-      setBrands([]);
-    } else {
-      setBrands(uniqueBrands);
-    }
-  };
-
-  const handleFilterByPrice = () => {
-    setFilteredPrices(prices);
-  };
-
-  const handlePriceChange = (event, newValue) => {
-    setPrices(newValue);
-  };
-
-  const blurMinPriceConditions = (newValue) => {
-    if (newValue < min_price || newValue === "NaN")
-      setPrices([min_price, prices[1]]);
-    else if (newValue > prices[1]) setPrices([prices[1], prices[1]]);
-    else setPrices([newValue, prices[1]]);
-  };
-
-  const blurMaxPriceConditions = (newValue) => {
-    if (newValue < prices[0] || newValue === "NaN")
-      setPrices([prices[0], prices[0]]);
-    else if (newValue > max_price) setPrices([prices[0], max_price]);
-    else setPrices([prices[0], newValue]);
-  };
-
-  const handleFilterByRating = () => {
-    setFilteredRatings(ratings);
-  };
-
-  const handleRatingChange = (event, newValue) => {
-    setRatings(newValue);
-  };
-
-  const blurMinRatingConditions = (newValue) => {
-    if (newValue < 0 || newValue === "NaN") setRatings([0, ratings[1]]);
-    else if (newValue > ratings[1]) setRatings([ratings[1], ratings[1]]);
-    else setRatings([newValue, ratings[1]]);
-  };
-
-  const blurMaxRatingConditions = (newValue) => {
-    if (newValue < ratings[0] || newValue === "NaN")
-      setRatings([ratings[0], ratings[0]]);
-    else if (newValue > 5) setRatings([ratings[0], 5]);
-    else setRatings([ratings[0], newValue]);
-  };
-
-  const handleClearFilters = () => {
-    setCategories([]);
-    setBrands([]);
-    setPrices([min_price, max_price]);
-    setFilteredPrices([0, 0]);
-    setRatings([0, 5]);
-    setFilteredRatings([0, 5]);
-  };
-
-  const handleToggleFilter = () => {
-    setOpenFilters(!openFilters);
-  };
-
-  useEffect(() => {
-    setCategories([]);
-    setBrands([]);
-    setPrices([0, 0]);
-    setFilteredPrices([0, 0]);
-    setRatings([0, 5]);
-    setFilteredRatings([0, 5]);
-  }, [searchQuery]);
-
   useEffect(() => {
     if (searchQuery) {
       dispatch(loadProducts(searchQuery));
     } else {
       navigate("/");
     }
+  }, [dispatch, searchQuery, productsList.length]);
 
-    if (productsList.length && prices[0] === 0 && prices[1] === 0) {
-      setPrices([min_price, max_price]);
-    }
+  const ProductNotFound = () => {
+    return (
+      <Box
+        sx={{
+          width: "98%",
+          height: "50%",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          px: 2,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+        textAlign={"center"}
+      >
+        <Typography
+          variant="h5"
+          fontSize={isDesktop ? 24 : 18}
+          component={"div"}
+          sx={{ color: "text.secondary" }}
+        >
+          There are no products found for your search - "{searchQuery}"
+        </Typography>
 
-    if (
-      !isFilteredByPrice &&
-      prices[0] !== min_price &&
-      prices[1] !== max_price
-    ) {
-      setPrices([min_price, max_price]);
-    }
+        <Typography
+          variant="subtitle1"
+          fontSize={isDesktop ? 18 : 15}
+          component={"div"}
+          sx={{ color: "text.secondary", marginTop: 2 }}
+        >
+          - Try checking for typos or use more general terms
+        </Typography>
 
-    if (productsList.length && ratings[0] === 0 && ratings[1] === 5) {
-      setFilteredRatings([0, 5]);
-    }
-
-    if (!isFilteredByRating && ratings[0] !== 0 && ratings[1] !== 5) {
-      setRatings([0, 5]);
-    }
-
-    if (productsList.length) {
-      let filtered_products = productsList;
-
-      if (isFilteredByCategory) {
-        filtered_products = filtered_products.filter((product) =>
-          categories.includes(product.category.name)
-        );
-      }
-
-      if (isFilteredByBrand) {
-        filtered_products = filtered_products.filter((product) =>
-          brands.includes(product.brand)
-        );
-      }
-
-      if (isFilteredByPrice) {
-        filtered_products = filtered_products.filter(
-          (product) =>
-            Number(product.price) >= prices[0] &&
-            Number(product.price) <= prices[1]
-        );
-      }
-
-      if (isFilteredByRating) {
-        filtered_products = filtered_products.filter(
-          (product) =>
-            Number(product.rating) >= ratings[0] &&
-            Number(product.rating) <= ratings[1]
-        );
-      }
-
-      setProducts(filtered_products);
-    } else {
-      setProducts([]);
-      handleClearFilters();
-    }
-  }, [
-    dispatch,
-    searchQuery,
-    productsList.length,
-    isFilteredByCategory,
-    isFilteredByBrand,
-    isFilteredByPrice,
-    filteredPrices[0],
-    filteredPrices[1],
-    filteredRatings[0],
-    filteredRatings[1],
-  ]);
+        <Button
+          variant="contained"
+          sx={{ marginTop: 2, fontWeight: "550" }}
+          color="inherit"
+          onClick={() => navigate("/")}
+        >
+          Go To Homepage
+        </Button>
+      </Box>
+    );
+  };
 
   return (
     <div>
@@ -291,480 +115,14 @@ const SearchPage = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : productsList.length === 0 ? (
-        <Box
-          sx={{
-            width: "98%",
-            height: "50%",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            px: 2,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          textAlign={"center"}
-        >
-          <Typography
-            variant="h5"
-            fontSize={isDesktop ? 24 : 18}
-            component={"div"}
-            sx={{ color: "text.secondary" }}
-          >
-            There are no products found for your search - "{searchQuery}"
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            fontSize={isDesktop ? 18 : 15}
-            component={"div"}
-            sx={{ color: "text.secondary", marginTop: 2 }}
-          >
-            - Try checking for typos or use more general terms
-          </Typography>
-
-          <Button
-            variant="contained"
-            sx={{ marginTop: 2, fontWeight: "550" }}
-            color="inherit"
-            onClick={() => navigate("/")}
-          >
-            Go To Homepage
-          </Button>
-        </Box>
+        <ProductNotFound />
       ) : (
-        <Stack
-          direction={isDesktop ? "row" : "column"}
-          spacing={1}
-          sx={{ marginTop: isDesktop ? 2 : 0 }}
-        >
-          {!isDesktop && openFilters && (
-            <Box
-              sx={{ bgcolor: "white", width: "100%" }}
-              component={Card}
-              elevation={5}
-              display="flex"
-              alignItems="center"
-            >
-              <IconButton onClick={handleToggleFilter}>
-                <ArrowBackIcon fontSize="large" />
-              </IconButton>
-
-              <Typography
-                variant="h6"
-                fontSize={18}
-                component={"h6"}
-                color="text.primary"
-              >
-                Filter
-              </Typography>
-            </Box>
-          )}
-
-          {(isDesktop || openFilters) && (
-            <Card
-              sx={{
-                bgcolor: "white",
-                padding: 2,
-                borderRadius: "5px",
-                minHeight: "50vh",
-                height: "fit-content",
-                width: isDesktop ? "22%" : "100%",
-              }}
-              elevation={5}
-            >
-              {isDesktop && (
-                <>
-                  <Typography
-                    variant="h6"
-                    fontSize={18}
-                    component={"h6"}
-                    color="text.primary"
-                  >
-                    Filter By
-                  </Typography>
-
-                  <Divider sx={{ marginBottom: 2 }} />
-                </>
-              )}
-              <Typography
-                variant="subtitle2"
-                fontSize={14}
-                component={"h6"}
-                color="text.secondary"
-              >
-                Category
-              </Typography>
-              <FormControlLabel
-                label="Select All"
-                control={
-                  <Checkbox
-                    checked={categories.length === uniqueCategories.length}
-                    indeterminate={
-                      categories.length > 0 &&
-                      categories.length < uniqueCategories.length
-                    }
-                    onChange={handleSelectAllCategories}
-                    size="small"
-                    color="default"
-                  />
-                }
-              />
-              <List
-                sx={{
-                  padding: 0,
-
-                  "& .MuiListItem-root": {
-                    py: 0,
-                    "&:hover": {
-                      cursor: "pointer",
-                      color: grey[400],
-                      "& .MuiCheckbox-root": {
-                        color: grey[400],
-                      },
-                    },
-                  },
-                }}
-              >
-                {uniqueCategories &&
-                  uniqueCategories.map((category) => (
-                    <ListItem key={category.name}>
-                      <FormControlLabel
-                        label={category.name}
-                        control={
-                          <Checkbox
-                            value={category.name}
-                            checked={categories.includes(category.name)}
-                            onChange={handleCategoryChange}
-                            color="default"
-                          />
-                        }
-                      />
-                    </ListItem>
-                  ))}
-              </List>
-              <Divider sx={{ my: 2 }} />
-              <Stack
-                direction="row"
-                sx={{ alignItems: "center", justifyContent: "space-between" }}
-              >
-                <Typography
-                  variant="subtitle2"
-                  component={"h6"}
-                  color="text.secondary"
-                  sx={{
-                    fontSize: 14,
-                    marginBottom: 1,
-                  }}
-                >
-                  Price ($)
-                </Typography>
-
-                <Button
-                  size="small"
-                  variant="outlined"
-                  color="inherit"
-                  sx={{ marginBottom: 1 }}
-                  onClick={handleFilterByPrice}
-                >
-                  Apply
-                </Button>
-              </Stack>
-              <Slider
-                value={prices}
-                onChange={handlePriceChange}
-                valueLabelDisplay="auto"
-                min={min_price}
-                max={max_price}
-                sx={{
-                  marginBottom: 1,
-                  color: grey[400],
-                }}
-              />
-              <Stack
-                direction="row"
-                spacing={0.5}
-                sx={{ marginBottom: 1, alignItems: "center" }}
-              >
-                <FilterNumericInput
-                  label="Min"
-                  values={prices}
-                  index={0}
-                  setValues={setPrices}
-                  step={0.01}
-                  min={min_price}
-                  max={max_price}
-                  props={{
-                    size: "small",
-                    sx: { width: "48%" },
-                  }}
-                  blurConditions={blurMinPriceConditions}
-                />
-
-                <MinusIcon fontSize="small" />
-
-                <FilterNumericInput
-                  label="Max"
-                  values={prices}
-                  index={1}
-                  setValues={setPrices}
-                  step={0.01}
-                  min={min_price}
-                  max={max_price}
-                  props={{
-                    size: "small",
-                    sx: { width: "48%" },
-                  }}
-                  blurConditions={blurMaxPriceConditions}
-                />
-              </Stack>
-              <Divider sx={{ my: 2 }} />
-              <Stack
-                direction="row"
-                sx={{ alignItems: "center", justifyContent: "space-between" }}
-              >
-                <Typography
-                  variant="subtitle2"
-                  component={"h6"}
-                  color="text.secondary"
-                  sx={{
-                    fontSize: 14,
-                    marginBottom: 1,
-                  }}
-                >
-                  Rating
-                </Typography>
-
-                <Button
-                  size="small"
-                  variant="outlined"
-                  color="inherit"
-                  sx={{ marginBottom: 1 }}
-                  onClick={handleFilterByRating}
-                >
-                  Apply
-                </Button>
-              </Stack>
-              <Slider
-                value={ratings}
-                onChange={handleRatingChange}
-                valueLabelDisplay="auto"
-                min={0}
-                max={5}
-                step={0.5}
-                sx={{
-                  marginBottom: 1,
-                  color: grey[400],
-                }}
-              />
-              <Stack
-                direction="row"
-                spacing={0.5}
-                sx={{ marginBottom: 1, alignItems: "center" }}
-              >
-                <FilterNumericInput
-                  label="Min"
-                  values={ratings}
-                  index={0}
-                  setValues={setRatings}
-                  step={0.5}
-                  min={0}
-                  max={5}
-                  props={{
-                    size: "small",
-                    sx: { width: "48%" },
-                  }}
-                  blurConditions={blurMinRatingConditions}
-                />
-
-                <MinusIcon fontSize="small" />
-
-                <FilterNumericInput
-                  label="Max"
-                  values={ratings}
-                  index={1}
-                  setValues={setRatings}
-                  step={0.5}
-                  min={0}
-                  max={5}
-                  props={{
-                    size: "small",
-                    sx: { width: "48%" },
-                  }}
-                  blurConditions={blurMaxRatingConditions}
-                />
-              </Stack>
-              <Divider sx={{ my: 2 }} />
-              <Typography
-                variant="subtitle2"
-                component={"h6"}
-                color="text.secondary"
-                sx={{
-                  fontSize: 14,
-                }}
-              >
-                Brand
-              </Typography>
-              <FormControlLabel
-                label="Select All"
-                control={
-                  <Checkbox
-                    checked={brands.length === uniqueBrands.length}
-                    indeterminate={
-                      brands.length > 0 && brands.length < uniqueBrands.length
-                    }
-                    onChange={handleSelectAllBrands}
-                    size="small"
-                    color="default"
-                  />
-                }
-              />
-              <List
-                sx={{
-                  padding: 0,
-
-                  "& .MuiListItem-root": {
-                    py: 0,
-                    marginBottom: 1,
-                    "&:hover": {
-                      cursor: "pointer",
-                      color: grey[400],
-                      "& .MuiCheckbox-root": {
-                        color: grey[400],
-                      },
-                    },
-                  },
-                }}
-              >
-                {uniqueBrands &&
-                  uniqueBrands.map((brand) => (
-                    <ListItem key={brand}>
-                      <FormControlLabel
-                        label={brand}
-                        control={
-                          <Checkbox
-                            value={brand}
-                            checked={brands.includes(brand)}
-                            onChange={handleBrandChange}
-                            color="default"
-                          />
-                        }
-                      />
-                    </ListItem>
-                  ))}
-              </List>
-              {!isDesktop && (
-                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                  <Button
-                    variant="outlined"
-                    color="inherit"
-                    size="large"
-                    fullWidth
-                    onClick={handleClearFilters}
-                    endIcon={<FilterAltOffIcon />}
-                    disabled={selectedFilters.length === 0}
-                  >
-                    Reset
-                  </Button>
-
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    size="large"
-                    fullWidth
-                    onClick={handleToggleFilter}
-                  >
-                    Show ({products.length})
-                  </Button>
-                </Stack>
-              )}
-            </Card>
-          )}
-
-          {!isDesktop && !openFilters && (
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                color="inherit"
-                size="large"
-                fullWidth
-                onClick={handleToggleFilter}
-                endIcon={selectedFilters.length === 0 && <FilterAltIcon />}
-              >
-                {selectedFilters.length === 0
-                  ? "Filter"
-                  : `Filters (${selectedFilters.length})`}
-              </Button>
-
-              {selectedFilters.length > 0 && (
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  size="large"
-                  fullWidth
-                  onClick={handleClearFilters}
-                  endIcon={<FilterAltOffIcon />}
-                >
-                  Reset
-                </Button>
-              )}
-            </Stack>
-          )}
-
-          {!openFilters && (
-            <Stack
-              direction="column"
-              spacing={2}
-              sx={{
-                bgcolor: "white",
-                padding: 2,
-                borderRadius: "5px",
-                width: isDesktop ? "78%" : "100%",
-                height: isDesktop && "fit-content",
-              }}
-              component={Card}
-              elevation={5}
-            >
-              {products.length > 0 ? (
-                <>
-                  <Typography
-                    variant="subtitle2"
-                    fontSize={14}
-                    component={"div"}
-                    color="text.secondary"
-                  >
-                    {products.length}{" "}
-                    {products.length === 1 ? "product" : "products"} found
-                  </Typography>
-
-                  <Divider />
-
-                  <Grid
-                    container
-                    spacing={1}
-                    sx={{
-                      paddingBottom: 1,
-                      paddingRight: 1,
-                      marginTop: 2,
-                    }}
-                  >
-                    {products.map((product) => (
-                      <Grid key={product._id} item xs={6} sm={4} md={3} lg={2}>
-                        <Product product={product} />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </>
-              ) : (
-                <Alert severity="info">
-                  No products found for the selected filters
-                </Alert>
-              )}
-            </Stack>
-          )}
-        </Stack>
+        <FilterComponent
+          products={productsList}
+          categories={uniqueCategories}
+          categoryFilterBy="name"
+          brands={uniqueBrands}
+        />
       )}
     </div>
   );
