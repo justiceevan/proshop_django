@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import BottomBar from "./components/BottomBar";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
+import CategoryPage from "./pages/CategoryPage";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
@@ -25,6 +26,7 @@ import UserEditPage from "./pages/UserEditPage";
 import ProductEditPage from "./pages/ProductEditPage";
 import OrderListPage from "./pages/OrderListPage";
 import SearchPage from "./pages/SearchPage";
+import PageNotFound from "./pages/PageNotFound";
 
 const navigationTheme = createTheme({
   components: {
@@ -100,6 +102,11 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} exact />
               <Route path="/search" element={<SearchPage />} />
+              <Route path="/:category" element={<CategoryPage />} />
+              <Route
+                path="/:category/:subcategory"
+                element={<CategoryPage />}
+              />
               <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/cart/:id" element={<CartPage />} />
@@ -115,6 +122,8 @@ function App() {
               <Route path="/admin/products" element={<ProductListPage />} />
               <Route path="/admin/products/:id" element={<ProductEditPage />} />
               <Route path="/admin/orders" element={<OrderListPage />} />
+              <Route path="/page404" element={<PageNotFound />} />
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </Container>
         </main>
