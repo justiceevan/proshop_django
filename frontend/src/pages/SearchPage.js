@@ -5,12 +5,11 @@ import {
   Typography,
   Button,
   Box,
+  Alert,
+  CircularProgress,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-
-import Loader from "../components/Loader";
-import Message from "../components/Message";
 
 import { loadProducts } from "../store/products";
 import FilterComponent from "../components/FilterComponent";
@@ -111,9 +110,13 @@ const SearchPage = () => {
   return (
     <div>
       {loading ? (
-        <Loader />
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
+          <CircularProgress color="inherit" />
+        </Box>
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Alert severity="error" variant="outlined">
+          {error}
+        </Alert>
       ) : productsList.length === 0 ? (
         <ProductNotFound />
       ) : (

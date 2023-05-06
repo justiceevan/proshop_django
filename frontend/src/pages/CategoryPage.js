@@ -8,6 +8,8 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
@@ -40,7 +42,7 @@ const CategoryPage = () => {
   const [products, setProducts] = useState([]);
 
   const reduxState = useSelector((state) => state);
-  const { productsList } = reduxState.products;
+  const { productsList, loading, error } = reduxState.products;
   const { categoryList: categories, subCategoryList: subcategories } =
     reduxState.categories;
 
@@ -59,12 +61,21 @@ const CategoryPage = () => {
     }
   });
 
-  const categoryName =
-    categories.length && categories.find((cat) => cat.slug === category).name;
-  const sub_categoryName =
+  let categoryName, sub_categoryName;
+
+  if (categories.length && categories.find((cat) => cat.slug === category)) {
+    categoryName = categories.find((cat) => cat.slug === category).name;
+  }
+
+  if (
     subcategory &&
     subcategories.length &&
-    subcategories.find((subcat) => subcat.slug === subcategory).name;
+    subcategories.find((subcat) => subcat.slug === subcategory)
+  ) {
+    sub_categoryName = subcategories.find(
+      (subcat) => subcat.slug === subcategory
+    ).name;
+  }
 
   useEffect(() => {
     dispatch(loadProducts());
@@ -91,7 +102,20 @@ const CategoryPage = () => {
     navigate(`/${category}/${slug}`);
   };
 
-  return (
+  return loading ? (
+    <CircularProgress
+      color="inherit"
+      sx={{
+        position: "absolute",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+    />
+  ) : error ? (
+    <Alert severity="error" variant="outlined">
+      {error}
+    </Alert>
+  ) : (
     <>
       {!isMobile && (
         <Breadcrumbs

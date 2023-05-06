@@ -245,7 +245,7 @@ const FilterComponent = ({
 
   return loadingProducts ? (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
-      <CircularProgress />
+      <CircularProgress color="inherit" />
     </Box>
   ) : (
     <Stack
