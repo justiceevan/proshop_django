@@ -9,6 +9,7 @@ import {
   Grid,
   Divider,
   Box,
+  Skeleton,
   ListItem,
   useTheme,
   useMediaQuery,
@@ -35,7 +36,7 @@ import {
   loadHotCategories,
 } from "../store/categories";
 
-const HomePageHeader = () => {
+const HomePageHeader = ({ loading }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -132,7 +133,15 @@ const HomePageHeader = () => {
   };
 
   const CategoriesComponent = () => {
-    return (
+    return loading ? (
+      <Skeleton
+        variant="rounded"
+        height="295px"
+        width="40%"
+        animation="wave"
+        sx={{ cursor: "pointer" }}
+      />
+    ) : (
       <Stack direction="row" width="40%">
         <List
           sx={{
@@ -205,15 +214,73 @@ const HomePageHeader = () => {
     );
   };
 
+  const HotCategoriesSkeleton = () => {
+    return (
+      <Box
+        sx={{
+          width: isDesktop ? "60%" : "100%",
+          bgcolor: "white",
+          padding: 0.5,
+          borderRadius: "5px",
+          boxShadow: 1,
+        }}
+      >
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height="20%"
+          animation="wave"
+        />
+
+        <Grid
+          container
+          spacing={0.5}
+          height={"78%"}
+          sx={{
+            borderRadius: "5px",
+            marginTop: 0.2,
+            marginLeft: 0.1,
+            paddingRight: 0.5,
+            "& .MuiGrid-item": {
+              width: "20%",
+              height: "50%",
+              padding: 0,
+              "&:hover": {
+                elevation: 3,
+                boxShadow: 3,
+                transform: "scale(1.02)",
+              },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              border: "1px solid #fff",
+            },
+          }}
+        >
+          {Array.from({ length: isDesktop ? 10 : 8 }, (_, i) => (
+            <Grid item key={i} xs={isMobile ? 3 : 0}>
+              <Skeleton
+                variant="rectangular"
+                animation="wave"
+                width="100%"
+                height="100%"
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  };
+
   const HotCategoriesComponent = () => {
     return (
       <Box
         sx={{
-          width: isDesktop ? "80%" : "100%",
+          width: isDesktop ? "60%" : "100%",
           bgcolor: "white",
           padding: 1,
           borderRadius: "5px",
-          visibility: "visible",
           boxShadow: 1,
         }}
       >
@@ -237,7 +304,7 @@ const HomePageHeader = () => {
             borderRadius: "5px",
             marginTop: 1,
             marginLeft: 0.1,
-            paddingRight: 1,
+            paddingRight: 0.5,
             "& .MuiGrid-item": {
               width: "20%",
               height: "50%",
@@ -279,7 +346,7 @@ const HomePageHeader = () => {
       }}
     >
       {isDesktop && <CategoriesComponent />}
-      <HotCategoriesComponent />
+      {loading ? <HotCategoriesSkeleton /> : <HotCategoriesComponent />}
     </Stack>
   );
 };
