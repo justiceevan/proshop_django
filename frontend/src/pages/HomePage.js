@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Box, Button, Skeleton } from "@mui/material";
+import { Grid, Box, Button, Alert } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Product from "../components/Product";
-import Message from "../components/Message";
 import HomePageHeader from "../components/HomePageHeader";
+import { ProductSkeleton } from "../components/Skeletons";
 
 import { loadProducts } from "../store/products";
 
@@ -43,22 +43,14 @@ const HomePage = () => {
         >
           {[...Array(24)].map((_, index) => (
             <Grid key={index} item xs={6} sm={4} md={3} lg={2}>
-              <Skeleton
-                variant="rounded"
-                animation="wave"
-                height="355px"
-                sx={{
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                  },
-                }}
-              />
+              <ProductSkeleton />
             </Grid>
           ))}
         </Grid>
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Alert severity="error" variant="outlined" sx={{ marginTop: 2 }}>
+          {error}
+        </Alert>
       ) : (
         <div>
           <Grid
@@ -82,31 +74,14 @@ const HomePage = () => {
 
           {productsToShow < products.length && (
             <Box mt={2} display="flex" justifyContent="center">
-              {loading ? (
-                <Grid container spacing={1}>
-                  {[...Array(24)].map((_, index) => (
-                    <Grid key={index} item xs={6} sm={4} md={3} lg={2}>
-                      <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        height="355px"
-                        sx={{
-                          cursor: "pointer",
-                        }}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              ) : (
-                <Button
-                  color="inherit"
-                  onClick={handleLoadMoreClick}
-                  variant="contained"
-                  endIcon={<ExpandMoreIcon />}
-                >
-                  Show More
-                </Button>
-              )}
+              <Button
+                color="inherit"
+                onClick={handleLoadMoreClick}
+                variant="contained"
+                endIcon={<ExpandMoreIcon />}
+              >
+                Show More
+              </Button>
             </Box>
           )}
         </div>

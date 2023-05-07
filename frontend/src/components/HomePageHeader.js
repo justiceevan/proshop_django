@@ -9,7 +9,6 @@ import {
   Grid,
   Divider,
   Box,
-  Skeleton,
   ListItem,
   useTheme,
   useMediaQuery,
@@ -29,6 +28,10 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 
 import CategoryListItem from "./CategoryListItem";
 import CategoryGridItem from "./CategoryGridItem";
+import {
+  HomePageHeaderCategorySkeleton,
+  HomePageHotCategoriesSkeleton,
+} from "./Skeletons";
 
 import {
   loadCategories,
@@ -134,13 +137,7 @@ const HomePageHeader = ({ loading }) => {
 
   const CategoriesComponent = () => {
     return loading ? (
-      <Skeleton
-        variant="rounded"
-        height="295px"
-        width="40%"
-        animation="wave"
-        sx={{ cursor: "pointer" }}
-      />
+      <HomePageHeaderCategorySkeleton />
     ) : (
       <Stack direction="row" width="40%">
         <List
@@ -214,65 +211,6 @@ const HomePageHeader = ({ loading }) => {
     );
   };
 
-  const HotCategoriesSkeleton = () => {
-    return (
-      <Box
-        sx={{
-          width: isDesktop ? "60%" : "100%",
-          bgcolor: "white",
-          padding: 0.5,
-          borderRadius: "5px",
-          boxShadow: 1,
-        }}
-      >
-        <Skeleton
-          variant="rectangular"
-          width="100%"
-          height="20%"
-          animation="wave"
-        />
-
-        <Grid
-          container
-          spacing={0.5}
-          height={"78%"}
-          sx={{
-            borderRadius: "5px",
-            marginTop: 0.2,
-            marginLeft: 0.1,
-            paddingRight: 0.5,
-            "& .MuiGrid-item": {
-              width: "20%",
-              height: "50%",
-              padding: 0,
-              "&:hover": {
-                elevation: 3,
-                boxShadow: 3,
-                transform: "scale(1.02)",
-              },
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              border: "1px solid #fff",
-            },
-          }}
-        >
-          {Array.from({ length: isDesktop ? 10 : 8 }, (_, i) => (
-            <Grid item key={i} xs={isMobile ? 3 : 0}>
-              <Skeleton
-                variant="rectangular"
-                animation="wave"
-                width="100%"
-                height="100%"
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    );
-  };
-
   const HotCategoriesComponent = () => {
     return (
       <Box
@@ -284,55 +222,61 @@ const HomePageHeader = ({ loading }) => {
           boxShadow: 1,
         }}
       >
-        <Stack direction="row" spacing={1} paddingTop={1}>
-          <LocalFireDepartmentIcon sx={{ color: "red" }} fontSize="large" />
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 550,
-            }}
-          >
-            Hot Categories
-          </Typography>
-        </Stack>
+        {loading ? (
+          <HomePageHotCategoriesSkeleton />
+        ) : (
+          <>
+            <Stack direction="row" spacing={1} paddingTop={1}>
+              <LocalFireDepartmentIcon sx={{ color: "red" }} fontSize="large" />
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 550,
+                }}
+              >
+                Hot Categories
+              </Typography>
+            </Stack>
 
-        <Grid
-          container
-          spacing={1}
-          height={"80%"}
-          sx={{
-            borderRadius: "5px",
-            marginTop: 1,
-            marginLeft: 0.1,
-            paddingRight: 0.5,
-            "& .MuiGrid-item": {
-              width: "20%",
-              height: "50%",
-              padding: 2,
-              "&:hover": {
-                elevation: 3,
-                boxShadow: 3,
-                transform: "scale(1.02)",
-              },
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              border: "1px solid #e0e0e0",
-            },
-          }}
-        >
-          {filteredHot.map((item) => (
-            <CategoryGridItem
-              onClick={() =>
-                handleClickHotCategory(item.main_category_slug, item.slug)
-              }
-              key={item.slug}
-              image={item.image}
-              label={item.category}
-            />
-          ))}
-        </Grid>
+            <Grid
+              container
+              spacing={1}
+              height={"80%"}
+              sx={{
+                borderRadius: "5px",
+                marginTop: 1,
+                marginLeft: 0.1,
+                paddingRight: 0.5,
+                "& .MuiGrid-item": {
+                  width: "20%",
+                  height: "50%",
+                  padding: 2,
+                  "&:hover": {
+                    elevation: 3,
+                    boxShadow: 3,
+                    transform: "scale(1.02)",
+                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "1px solid #e0e0e0",
+                },
+              }}
+            >
+              {filteredHot.map((item) => (
+                <CategoryGridItem
+                  onClick={() =>
+                    handleClickHotCategory(item.main_category_slug, item.slug)
+                  }
+                  key={item.slug}
+                  image={item.image}
+                  label={item.category}
+                />
+              ))}
+            </Grid>
+          </>
+        )}
       </Box>
     );
   };
@@ -346,7 +290,7 @@ const HomePageHeader = ({ loading }) => {
       }}
     >
       {isDesktop && <CategoriesComponent />}
-      {loading ? <HotCategoriesSkeleton /> : <HotCategoriesComponent />}
+      <HotCategoriesComponent />
     </Stack>
   );
 };
