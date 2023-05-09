@@ -5,6 +5,10 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Badge,
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
   Avatar,
   Divider,
   Menu,
@@ -23,6 +27,12 @@ import OrdersIcon from "@mui/icons-material/LocalShipping";
 import NavMenuItem from "./NavMenuItem";
 
 import { logout } from "../store/user";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { toast } from "react-toastify";
+
+import { addItemToCart, removeCartItem } from "../store/cart";
 
 function BottomBar() {
   const navigate = useNavigate();
@@ -30,6 +40,7 @@ function BottomBar() {
 
   const { userInfo } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
+  const { product } = useSelector((state) => state.productDetails);
 
   let totalItemsInCart = 0;
   cartItems.map((item) => (totalItemsInCart += Number(item.quantity)));
@@ -39,6 +50,15 @@ function BottomBar() {
   if (!path) {
     path = "/";
   }
+
+  const onProductPage = path.startsWith("/product/");
+  const productId = onProductPage && path.split("/")[2];
+
+  const productExistsInCart = cartItems.find(
+    (item) => item.productId === Number(productId)
+  );
+  const productStock = product.countInStock;
+  const [quantityLoading, setQuantityLoading] = useState(false);
 
   const [value, setValue] = useState(1);
   const [adminAnchorEl, setAdminAnchorEl] = useState(null);
@@ -53,6 +73,7 @@ function BottomBar() {
       path.startsWith("/login") ||
       path.startsWith("/register")) &&
       setValue(3);
+    onProductPage && setValue(4);
   }, [path, value]);
 
   const handleLogout = () => {
@@ -89,6 +110,58 @@ function BottomBar() {
     setAccountAnchorEl(null);
   };
 
+  const handleAddToCart = (event) => {
+    event.stopPropagation();
+
+    setQuantityLoading(true);
+    setTimeout(() => {
+      setQuantityLoading(false);
+    }, 600);
+
+    const quantity = 1;
+    if (quantity > productStock) {
+      toast.info("Product out of stock");
+      return;
+    }
+    dispatch(addItemToCart(product._id, quantity));
+    toast.success("Item added to cart");
+  };
+
+  const handleIncrement = (event) => {
+    event.stopPropagation();
+
+    setQuantityLoading(true);
+    setTimeout(() => {
+      setQuantityLoading(false);
+    }, 800);
+
+    const quantity = productExistsInCart.quantity + 1;
+    if (quantity > productStock) {
+      toast.info("Product out of stock");
+      return;
+    }
+    dispatch(addItemToCart(product._id, quantity));
+    toast.success("Item added to cart");
+  };
+
+  const handleDecrement = (event) => {
+    event.stopPropagation();
+
+    setQuantityLoading(true);
+    setTimeout(() => {
+      setQuantityLoading(false);
+    }, 800);
+
+    const quantity = productExistsInCart.quantity - 1;
+    if (quantity === 0) {
+      dispatch(removeCartItem(product._id));
+      toast.success("Product removed from cart");
+    } else {
+      dispatch(addItemToCart(product._id, quantity));
+      toast.success("Item quantity updated");
+    }
+  };
+
   return (
     <BottomNavigation
       sx={{
@@ -117,7 +190,7 @@ function BottomBar() {
         onClick={() => navigate("/cart")}
       />
 
-      {userInfo && userInfo.isAdmin && (
+      {userInfo && userInfo.isAdmin && !onProductPage && (
         <BottomNavigationAction
           label="Admin"
           icon={<AdminIcon fontSize="small" />}
@@ -125,21 +198,123 @@ function BottomBar() {
         />
       )}
 
-      {userInfo ? (
-        <BottomNavigationAction
-          onClick={handleProfileClick}
-          icon={
-            <Avatar sizes="small">
-              {userInfo.name.split(" ").map((name) => name[0])}
-            </Avatar>
-          }
-        />
-      ) : (
-        <BottomNavigationAction
-          label="Account"
-          icon={<PersonIcon fontSize="small" />}
-          onClick={handleAccountClick}
-        />
+      {!onProductPage &&
+        (userInfo ? (
+          <BottomNavigationAction
+            onClick={handleProfileClick}
+            icon={
+              <Avatar sizes="small">
+                {userInfo.name.split(" ").map((name) => name[0])}
+              </Avatar>
+            }
+          />
+        ) : (
+          <BottomNavigationAction
+            label="Account"
+            icon={<PersonIcon fontSize="small" />}
+            onClick={handleAccountClick}
+          />
+        ))}
+
+      {onProductPage && (
+        <Box
+          ml={2}
+          sx={{
+            width: "50%",
+            height: "90%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+          }}
+        >
+          {productExistsInCart ? (
+            <Box
+              sx={{
+                display: "flex",
+                width: "70%",
+                height: "80%",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{ flex: "0 0 10%", minWidth: "30px" }}
+                onClick={handleDecrement}
+                disabled={quantityLoading}
+              >
+                <RemoveIcon color="white" fontSize="small" />
+              </Button>
+              <Typography
+                variant="body2"
+                align="center"
+                sx={{ flex: "1 1 80%" }}
+              >
+                {quantityLoading ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  productExistsInCart.quantity
+                )}
+              </Typography>
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{
+                  flex: "0 0 10%",
+                  minWidth: "30px",
+                  "&:disabled": {
+                    color: "white",
+                    opacity: 0.5,
+                  },
+                }}
+                onClick={handleIncrement}
+                disabled={
+                  quantityLoading ||
+                  productExistsInCart.quantity === productStock
+                }
+              >
+                <AddIcon color="white" fontSize="small" />
+              </Button>
+            </Box>
+          ) : quantityLoading ? (
+            <Box
+              sx={{
+                marginTop: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <CircularProgress size={20} color="inherit" />
+            </Box>
+          ) : (
+            <Button
+              variant="outlined"
+              size="small"
+              color="inherit"
+              sx={{
+                color: "white",
+                fontWeight: 550,
+                fontSize: 12,
+                textTransform: "none",
+                width: "80%",
+                height: "90%",
+                alignSelf: "center",
+                borderRadius: 25,
+                "&:disabled": {
+                  color: "grey",
+                  borderColor: "white",
+                  opacity: 0.5,
+                },
+              }}
+              onClick={handleAddToCart}
+              endIcon={<AddShoppingCartIcon fontSize="small" />}
+            >
+              Add to Cart
+            </Button>
+          )}
+        </Box>
       )}
 
       <Menu

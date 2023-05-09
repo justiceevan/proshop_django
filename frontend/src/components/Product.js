@@ -21,6 +21,8 @@ import { toast } from "react-toastify";
 
 import { addItemToCart, removeCartItem } from "../store/cart";
 
+import httpService from "../utils/httpService";
+
 const Product = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,6 +40,15 @@ const Product = ({ product }) => {
 
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
+
+    const incrementClickCount = async () => {
+      try {
+        await httpService.put(`/api/products/${product._id}/incClicks/`);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    incrementClickCount();
   };
 
   const handleAddToCart = (event) => {
@@ -141,7 +152,7 @@ const Product = ({ product }) => {
             <Rating
               value={Number(product.rating)}
               size="small"
-              precision={0.5}
+              precision={0.1}
               readOnly
               sx={{ "& .MuiRating-icon": { fontSize: "0.8rem" } }}
             />
