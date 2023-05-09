@@ -9,6 +9,7 @@ import {
   Card,
   Rating,
   List,
+  Alert,
   Button,
   IconButton,
   ListItem,
@@ -32,8 +33,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import ReviewStar from "../components/ReviewStar";
 import { ProductPageSkeleton } from "../components/Skeletons";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
 
 import { addItemToCart, removeCartItem } from "../store/cart";
 import { getProductDetails } from "../store/productDetails";
@@ -167,7 +166,7 @@ const ProductPage = () => {
       {loading ? (
         <ProductPageSkeleton />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Alert severity="error">{error}</Alert>
       ) : (
         <>
           {!showAllReviews && (
@@ -382,7 +381,14 @@ const ProductPage = () => {
                           <Button
                             variant="contained"
                             color="inherit"
-                            sx={{ flex: "0 0 10%", minWidth: "30px" }}
+                            sx={{
+                              flex: "0 0 10%",
+                              minWidth: "30px",
+                              "&:disabled": {
+                                cursor: "not-allowed",
+                                pointerEvents: "auto",
+                              },
+                            }}
                             onClick={handleDecrement}
                             disabled={quantityLoading}
                           >
@@ -402,7 +408,14 @@ const ProductPage = () => {
                           <Button
                             variant="contained"
                             color="inherit"
-                            sx={{ flex: "0 0 10%", minWidth: "30px" }}
+                            sx={{
+                              flex: "0 0 10%",
+                              minWidth: "30px",
+                              "&:disabled": {
+                                cursor: "not-allowed",
+                                pointerEvents: "auto",
+                              },
+                            }}
                             onClick={handleIncrement}
                             disabled={
                               quantityLoading || productStock === quantity
@@ -417,6 +430,12 @@ const ProductPage = () => {
                           color="inherit"
                           fullWidth
                           disabled={productStock === 0}
+                          sx={{
+                            "&:disabled": {
+                              cursor: "not-allowed",
+                              pointerEvents: "auto",
+                            },
+                          }}
                           onClick={handleAddToCart}
                           endIcon={<AddShoppingCartIcon />}
                         >

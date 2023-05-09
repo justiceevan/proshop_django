@@ -179,7 +179,14 @@ const Product = ({ product }) => {
               <Button
                 variant="contained"
                 color="inherit"
-                sx={{ flex: "0 0 10%", minWidth: "30px" }}
+                sx={{
+                  flex: "0 0 10%",
+                  minWidth: "30px",
+                  "&:disabled": {
+                    cursor: "not-allowed",
+                    pointerEvents: "auto",
+                  },
+                }}
                 onClick={handleDecrement}
                 disabled={quantityLoading}
               >
@@ -199,7 +206,14 @@ const Product = ({ product }) => {
               <Button
                 variant="contained"
                 color="inherit"
-                sx={{ flex: "0 0 10%", minWidth: "30px" }}
+                sx={{
+                  flex: "0 0 10%",
+                  minWidth: "30px",
+                  "&:disabled": {
+                    cursor: "not-allowed",
+                    pointerEvents: "auto",
+                  },
+                }}
                 onClick={handleIncrement}
                 disabled={quantityLoading}
               >

@@ -579,6 +579,12 @@ const FilterComponent = ({
                 color="inherit"
                 size="large"
                 fullWidth
+                sx={{
+                  "&:disabled": {
+                    cursor: "not-allowed",
+                    pointerEvents: "auto",
+                  },
+                }}
                 onClick={handleClearFilters}
                 endIcon={<FilterAltOffIcon />}
                 disabled={selectedFilters.length === 0}

@@ -44,7 +44,6 @@ const useStyles = makeStyles({
   },
 });
 
-// FIXME: Check if this is working on production
 const logoUrl =
   process.env.NODE_ENV === "production"
     ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/logo.jpg"
