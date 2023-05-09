@@ -95,7 +95,7 @@ const FilterComponent = ({
     const index = brands.indexOf(event.target.value);
 
     if (index === -1) setBrands([...brands, event.target.value]);
-    else setBrands(brands.filter((brand) => brand != event.target.value));
+    else setBrands(brands.filter((brand) => brand !== event.target.value));
   };
 
   const handleSelectAllCategories = () => {

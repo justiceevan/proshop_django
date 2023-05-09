@@ -149,7 +149,6 @@ const CategoryPage = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "fit-content",
               bgcolor: grey[800],
               mt: -1,
               mx: -1,

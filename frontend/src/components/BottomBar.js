@@ -74,7 +74,7 @@ function BottomBar() {
       path.startsWith("/register")) &&
       setValue(3);
     onProductPage && setValue(4);
-  }, [path, value]);
+  }, [path, value, onProductPage]);
 
   const handleLogout = () => {
     dispatch(logout());

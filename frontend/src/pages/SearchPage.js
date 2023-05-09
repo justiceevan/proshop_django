@@ -57,7 +57,7 @@ const SearchPage = () => {
     } else {
       navigate("/");
     }
-  }, [dispatch, searchQuery, productsList.length]);
+  }, [dispatch, navigate, searchQuery, productsList.length]);
 
   const ProductNotFound = () => {
     return (
