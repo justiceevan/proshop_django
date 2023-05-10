@@ -25,7 +25,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (userInfo) navigate(`/${redirect}`);
     dispatch(clearError());
-  }, [userInfo, navigate, redirect]);
+  }, [userInfo, dispatch, navigate, redirect]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
