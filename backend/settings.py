@@ -10,9 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+from django.core.management.utils import get_random_secret_key
 from datetime import timedelta
 from pathlib import Path
 import os
+import sys
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,17 +25,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b=_49t9rfx%i(+=@r2sb_)%otz4&p579qp9d%$l-i#0x1-^2%*'
+SECRET_KEY = os.environ.get('SECRET_KEY', get_random_secret_key())
+
+# DEVELOPMENT_MODE: True if the app is running in development mode
+# This will allow the app to use db.sqlite3 for development
+
+DEVELOPMENT_MODE = os.environ.get('DEVELOPMENT_MODE', 'False') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['proshop-eshop.herokuapp.com',
-                 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', 'localhost, 127.0.0.0.1').split(', ')
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,10 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'frontend.build',
 
     'rest_framework',
     'corsheaders',
+    'storages',
+
+
+
+    'frontend.build',
 
     'base.apps.BaseConfig',
 ]
@@ -130,24 +141,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'proshop_database',
-#         'USER': 'postgres',
-#         'PASSWORD': 'letmein',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.environ.get("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -183,17 +190,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+
 STATIC_URL = 'static/'
-MEDIA_URL = 'images/'
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-MEDIA_ROOT = 'static/images/'
 
 STATIC_FILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
+
+if DEVELOPMENT_MODE is True:
+    MEDIA_URL = 'images/'
+    MEDIA_ROOT = 'static/images/'
+else:
+    from .cdn.conf import *  # noqa
+    MEDIA_URL = AWS_S3_ENDPOINT_URL + "/images/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

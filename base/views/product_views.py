@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
-from base.models import Product, Review
+from base.models import Product, Review, SubCategory
 from base.serializer import ProductSerializer
 
 
@@ -18,8 +18,21 @@ def getProducts(request):
 
     products = Product.objects.filter(name__icontains=query)
 
-    print('query', query)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
 
+
+@api_view(['GET'])
+def getProductsByCategory(request, slug):
+    sub_categories = SubCategory.objects.filter(category__slug=slug)
+    products = Product.objects.filter(category__in=sub_categories)
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getProductsBySubCategory(request, slug):
+    products = Product.objects.filter(category__slug=slug)
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
@@ -45,10 +58,12 @@ def updateProduct(request, pk):
 
     product = Product.objects.get(_id=pk)
 
+    category = SubCategory.objects.get(slug=data['category'])
+
     product.name = data['name']
     product.price = data['price']
     product.brand = data['brand']
-    product.category = data['category']
+    product.category = category
     product.countInStock = data['countInStock']
     product.description = data['description']
 
@@ -68,7 +83,6 @@ def createProduct(request):
         name='Sample Name',
         description='',
         price=0,
-        category='Sample Category',
         brand='Sample Brand',
         countInStock=0,
     )
@@ -85,6 +99,42 @@ def deleteProduct(request, pk):
 
     serializer = ProductSerializer(product, many=False)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+def incrementClickCount(request, pk):
+    product = Product.objects.get(_id=pk)
+    product.clickCount += 1
+    product.save()
+
+    return Response('Click count was incremented')
+
+
+@api_view(['GET'])
+def getHotCategories(request):
+    hot_categories = []
+    products = Product.objects.all()
+    categories = SubCategory.objects.all()
+
+    for category in categories:
+        category_clicks = 0
+        for product in products:
+            if product.category == category:
+                category_clicks += product.clickCount
+        hot_categories.append({
+            'category': category.name,
+            'main_category': category.category.name,
+            'main_category_slug': category.category.slug,
+            'slug': category.slug,
+            'image': category.image.url,
+            'clicks': category_clicks
+        })
+
+    # Sort by clicks in descending order and get top 10
+    hot_categories.sort(key=lambda x: x['clicks'], reverse=True)
+    hot_categories = hot_categories[:10]
+
+    return Response(hot_categories)
 
 
 @api_view(['POST'])
@@ -115,7 +165,7 @@ def createProductReview(request, pk):
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     elif data['rating'] == 0:
-        content = {'detail': 'Pliease select a rating'}
+        content = {'detail': 'Please select a rating'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     else:
