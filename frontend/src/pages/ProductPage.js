@@ -800,7 +800,7 @@ const ProductPage = () => {
                       height="150px"
                     >
                       <img
-                        src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/no-comment.png"
+                        src="images/no-comment.png"
                         height="100px"
                         width="100px"
                         loading="lazy"
@@ -827,7 +827,7 @@ const ProductPage = () => {
                 height="150px"
               >
                 <img
-                  src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/no-comment.png"
+                  src="images/no-comment.png"
                   height="100px"
                   width="100px"
                   loading="lazy"

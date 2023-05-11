@@ -159,7 +159,7 @@ function Navbar() {
             {isMobile ? (
               <IconButton component={Link} to="/">
                 <img
-                  src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
+                  src="/images/logo.jpg"
                   alt="logo"
                   className={styles.logo}
                 />
@@ -171,7 +171,7 @@ function Navbar() {
                 sx={{ fontSize: 20 }}
                 startIcon={
                   <img
-                    src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
+                    src="/images/logo.jpg"
                     alt="logo"
                     className={styles.logo}
                   />

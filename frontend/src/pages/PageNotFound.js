@@ -9,7 +9,7 @@ const PageNotFound = () => {
         Page not found
       </Typography>
       <img
-        src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/404.png"
+        src="images/404.png"
         alt="404 Page Not Found"
         style={{ maxWidth: "60%", height: "auto" }}
         className="my-3"
