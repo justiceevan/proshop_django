@@ -3,7 +3,7 @@ from .settings import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://pro-eshop.azurewebsites.net']
+ALLOWED_HOSTS = ['pro-eshop.azurewebsites.net']
 
 MEDIA_ROOT = ''
 MEDIA_URL = 'https://proshopstorage.blob.core.windows.net/proshopcontainer/images/'
