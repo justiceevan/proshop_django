@@ -2,6 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 
+const imageUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/404.png"
+    : "/images/404.png";
+
 const PageNotFound = () => {
   return (
     <Box sx={{ textAlign: "center" }}>
@@ -9,7 +14,7 @@ const PageNotFound = () => {
         Page not found
       </Typography>
       <img
-        src="images/404.png"
+        src={imageUrl}
         alt="404 Page Not Found"
         style={{ maxWidth: "60%", height: "auto" }}
         className="my-3"
