@@ -10,6 +10,7 @@ const slice = createSlice({
     loading: false,
     error: null,
     lastFetch: null,
+    searchQuery: "",
 
     successDelete: false,
     successCreate: false,
@@ -27,6 +28,10 @@ const slice = createSlice({
       products.productsList = action.payload;
       products.loading = false;
       products.lastFetch = Date.now();
+    },
+
+    searchQueryChanged: (products, action) => {
+      products.searchQuery = action.payload;
     },
 
     productsRequestFailed: (products, action) => {
@@ -79,6 +84,7 @@ const slice = createSlice({
 const {
   productsRequested,
   productsReceived,
+  searchQueryChanged,
   productsRequestFailed,
   productCreated,
   productUpdated,
@@ -95,10 +101,12 @@ export default slice.reducer;
 export const loadProducts =
   (searchQuery = "") =>
   (dispatch, getState) => {
-    const { lastFetch } = getState().products;
+    const { lastFetch, searchQuery: srcQuery } = getState().products;
     const diffInMinutes = (Date.now() - lastFetch) / (1000 * 60);
 
-    if (diffInMinutes < 10) return;
+    let byPassCache = !(searchQuery === srcQuery);
+
+    if (diffInMinutes < 10 && !byPassCache) return;
 
     dispatch(
       apiCallBegun({
@@ -108,6 +116,8 @@ export const loadProducts =
         onStart: productsRequested.type,
       })
     );
+
+    dispatch({ type: searchQueryChanged.type, payload: searchQuery });
   };
 
 export const createProduct = () => (dispatch, getState) => {
