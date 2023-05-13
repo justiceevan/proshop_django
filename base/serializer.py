@@ -1,7 +1,7 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import RefreshToken
-from .models import Product, Order, OrderItem, ShippingAddress, Review
+from .models import Product, Order, OrderItem, ShippingAddress, Review, Category, SubCategory
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -46,8 +46,32 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SubCategorySerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+
+    def get_category(self, obj):
+        if obj.category is not None:
+            return {
+                '_id': obj.category._id,
+                'name': obj.category.name,
+                'slug': obj.category.slug,
+            }
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
 class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
+    category = serializers.SerializerMethodField(read_only=True)
+    image_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
@@ -57,6 +81,18 @@ class ProductSerializer(serializers.ModelSerializer):
         reviews = obj.review_set.all()
         serializer = ReviewSerializer(reviews, many=True)
         return serializer.data
+
+    def get_category(self, obj):
+        if obj.category is not None:
+            return {
+                'name': obj.category.category.name,
+                'sub_category': obj.category.name,
+                'slug': obj.category.slug,
+                'cat_slug': obj.category.category.slug,
+            }
+
+    def get_image_name(self, obj):
+        return obj.image.name.split('/')[-1]
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

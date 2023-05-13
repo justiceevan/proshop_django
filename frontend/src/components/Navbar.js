@@ -44,6 +44,12 @@ const useStyles = makeStyles({
   },
 });
 
+// FIXME: Check if this is working on production
+const logoUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/logo.jpg"
+    : "/images/logo.jpg";
+
 function Navbar() {
   const dispatch = useDispatch();
 
@@ -158,11 +164,7 @@ function Navbar() {
 
             {isMobile ? (
               <IconButton component={Link} to="/">
-                <img
-                  src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
-                  alt="logo"
-                  className={styles.logo}
-                />
+                <img src={logoUrl} alt="logo" className={styles.logo} />
               </IconButton>
             ) : (
               <Button
@@ -170,11 +172,7 @@ function Navbar() {
                 to="/"
                 sx={{ fontSize: 20 }}
                 startIcon={
-                  <img
-                    src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/logo.jpg"
-                    alt="logo"
-                    className={styles.logo}
-                  />
+                  <img src={logoUrl} alt="logo" className={styles.logo} />
                 }
               >
                 PROSHOP

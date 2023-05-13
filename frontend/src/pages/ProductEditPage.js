@@ -72,7 +72,7 @@ const ProductEditPage = () => {
       } else {
         setName(product.name);
         setPrice(product.price);
-        setImage(product.image);
+        setImage(product.image_name);
         setBrand(product.brand);
         product.category && setCategory(product.category.name);
         product.category && setSubCategory(product.category.sub_category);

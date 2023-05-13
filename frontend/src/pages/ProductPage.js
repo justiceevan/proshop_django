@@ -46,6 +46,11 @@ const CustomLink = styled(Link)({
   },
 });
 
+const commentImageUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/no-comment.png"
+    : "/images/no-comment.png";
+
 const ProductPage = () => {
   const dispatch = useDispatch();
 
@@ -800,7 +805,7 @@ const ProductPage = () => {
                       height="150px"
                     >
                       <img
-                        src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/no-comment.png"
+                        src={commentImageUrl}
                         height="100px"
                         width="100px"
                         loading="lazy"
@@ -827,7 +832,7 @@ const ProductPage = () => {
                 height="150px"
               >
                 <img
-                  src="https://proshop.nyc3.cdn.digitaloceanspaces.com/proshop/images/no-comment.png"
+                  src={commentImageUrl}
                   height="100px"
                   width="100px"
                   loading="lazy"

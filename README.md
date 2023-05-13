@@ -2,7 +2,7 @@
 
 - This is a simple ecommerce web application running on Django backend, React frontend and a PostgreSQL database.
 
-- The application is hosted on DigitalOcean and can be accessed through this [link](https://proshop-f46rm.ondigitalocean.app)
+- The application is hosted on Azure and can be accessed through this [link](https://pro-eshop.azurewebsites.net/)
 
 - To run the app in development mode, you need to have Python 3.6 or higher installed on your machine.
 
@@ -32,19 +32,18 @@
    pip install -r requirements.txt
    ```
 
-5. Create a .env file in the root directory and add the following environment variables
+5. Add the environment variables
+
+   #### option 1: create a .env file in the root directory and add the following environment variables
 
    ```
    SECRET_KEY=your_secret_key
-   ALLOWED_HOSTS=localhost
-   DEVELOPEMENT_MODE=True
-   DEBUG=True
-   DATABASE_URL=postgres://user:password@localhost:5432/db_name
    ```
 
-   ```
-   NB: The app uses sqlite3 database when DEVELOPEMENT_MODE is set to True and PostgreSQL 
-   database if DEVELOPMENT_MODE is set to False
+   #### option 2: export the environment variables in your terminal
+
+   ```bash
+   export SECRET_KEY=your_secret_key
    ```
 
 6. Run the migrations

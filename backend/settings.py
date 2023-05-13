@@ -14,8 +14,9 @@ from django.core.management.utils import get_random_secret_key
 from datetime import timedelta
 from pathlib import Path
 import os
-import sys
-import dj_database_url
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', 'development')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,18 +26,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', get_random_secret_key())
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # DEVELOPMENT_MODE: True if the app is running in development mode
 # This will allow the app to use db.sqlite3 for development
 
-DEVELOPMENT_MODE = os.environ.get('DEVELOPMENT_MODE', 'False') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', 'localhost, 127.0.0.0.1').split(', ')
+if ENVIRONMENT == 'production':
+    DEBUG = False
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,15 +50,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     'rest_framework',
     'corsheaders',
     'storages',
 
-
-
     'frontend.build',
-
     'base.apps.BaseConfig',
 ]
 
@@ -142,19 +140,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-if DEVELOPMENT_MODE is True:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.environ.get("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
-    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -193,18 +185,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = 'images/'
+MEDIA_ROOT = 'static/images/'
 
 STATIC_FILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
-
-if DEVELOPMENT_MODE is True:
-    MEDIA_URL = 'images/'
-    MEDIA_ROOT = 'static/images/'
-else:
-    from .cdn.conf import *  # noqa
-    MEDIA_URL = AWS_S3_ENDPOINT_URL + "/images/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
