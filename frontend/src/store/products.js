@@ -9,6 +9,7 @@ const slice = createSlice({
     topRatedProducts: [],
     loading: false,
     error: null,
+    lastFetch: null,
 
     successDelete: false,
     successCreate: false,
@@ -25,6 +26,7 @@ const slice = createSlice({
     productsReceived: (products, action) => {
       products.productsList = action.payload;
       products.loading = false;
+      products.lastFetch = Date.now();
     },
 
     productsRequestFailed: (products, action) => {
@@ -92,7 +94,12 @@ export default slice.reducer;
 
 export const loadProducts =
   (searchQuery = "") =>
-  (dispatch) => {
+  (dispatch, getState) => {
+    const { lastFetch } = getState().products;
+    const diffInMinutes = (Date.now() - lastFetch) / (1000 * 60);
+
+    if (diffInMinutes < 10) return;
+
     dispatch(
       apiCallBegun({
         url: `/api/products?query=${searchQuery}`,
