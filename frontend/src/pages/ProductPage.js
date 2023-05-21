@@ -37,6 +37,8 @@ import { ProductPageSkeleton } from "../components/Skeletons";
 import { addItemToCart, removeCartItem } from "../store/cart";
 import { getProductDetails } from "../store/productDetails";
 
+import { commentImageUrl } from "../utils/imageUrls";
+
 const CustomLink = styled(Link)({
   textDecoration: "none",
   color: "inherit",
@@ -44,11 +46,6 @@ const CustomLink = styled(Link)({
     textDecoration: "underline",
   },
 });
-
-const commentImageUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/no-comment.png"
-    : "/images/no-comment.png";
 
 const ProductPage = () => {
   const dispatch = useDispatch();

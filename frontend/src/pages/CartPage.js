@@ -165,6 +165,7 @@ const CartPage = () => {
         <List>
           {cartItems.map((item) => (
             <ListItem
+              key={item.productId}
               sx={{
                 width: "100%",
                 mb: 0.8,
