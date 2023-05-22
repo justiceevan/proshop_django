@@ -9,6 +9,7 @@ const slice = createSlice({
     hotCategories: [],
     loading: false,
     error: null,
+    lastFetch: null,
   },
   reducers: {
     categoriesRequested: (categories, action) => {
@@ -19,6 +20,8 @@ const slice = createSlice({
       categories.categoryList = action.payload;
       categories.loading = false;
 
+      categories.lastFetch = Date.now();
+
       localStorage.setItem(
         "categories",
         JSON.stringify(categories.categoryList)
@@ -28,6 +31,8 @@ const slice = createSlice({
     subCategoriesReceived: (categories, action) => {
       categories.subCategoryList = action.payload;
       categories.loading = false;
+
+      categories.lastFetch = Date.now();
 
       localStorage.setItem(
         "subCategories",
@@ -66,6 +71,11 @@ export default slice.reducer;
 const url = "/api/categories";
 
 export const loadCategories = () => (dispatch, getState) => {
+  const { lastFetch } = getState().categories;
+  const diffInMinutes = (Date.now() - lastFetch) / (1000 * 60);
+
+  if (diffInMinutes < 10) return;
+
   return dispatch(
     apiCallBegun({
       url,
@@ -77,6 +87,11 @@ export const loadCategories = () => (dispatch, getState) => {
 };
 
 export const loadSubCategories = () => (dispatch, getState) => {
+  const { lastFetch } = getState().categories;
+  const diffInMinutes = (Date.now() - lastFetch) / (1000 * 60);
+
+  if (diffInMinutes < 10) return;
+
   return dispatch(
     apiCallBegun({
       url: `${url}/sub/`,

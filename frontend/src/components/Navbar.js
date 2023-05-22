@@ -8,6 +8,7 @@ import {
   IconButton,
   Stack,
   Button,
+  Container,
   Badge,
   Menu,
   useTheme,
@@ -30,7 +31,7 @@ import NavMenuItem from "./NavMenuItem";
 
 import { logout } from "../store/user";
 
-import { calculateToolbarPadding } from "../utils/toolBarPadding";
+import { logoUrl } from "../utils/imageUrls";
 
 const useStyles = makeStyles({
   logo: {
@@ -44,12 +45,6 @@ const useStyles = makeStyles({
   },
 });
 
-// FIXME: Check if this is working on production
-const logoUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/logo.jpg"
-    : "/images/logo.jpg";
-
 function Navbar() {
   const dispatch = useDispatch();
 
@@ -60,8 +55,6 @@ function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
   const width = window.innerWidth;
-
-  const toolBarPadding = calculateToolbarPadding(width);
 
   const { userInfo } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
@@ -147,200 +140,201 @@ function Navbar() {
   };
 
   return (
-    <AppBar
-      position={isMobile ? "fixed" : "static"}
-      sx={{ px: isMobile ? 0 : toolBarPadding }}
-    >
-      <Toolbar>
-        <Stack
-          direction="row"
-          alignItems="center"
-          display="flex"
-          justifyContent="space-between"
-          width={isMobile ? "100%" : "auto"}
-        >
-          <Stack direction="row" marginRight={1}>
-            {!isDesktop && <CategoryDrawer />}
-
-            {isMobile ? (
-              <IconButton component={Link} to="/">
-                <img src={logoUrl} alt="logo" className={styles.logo} />
-              </IconButton>
-            ) : (
-              <Button
-                component={Link}
-                to="/"
-                sx={{ fontSize: 20 }}
-                startIcon={
-                  <img src={logoUrl} alt="logo" className={styles.logo} />
-                }
-              >
-                PROSHOP
-              </Button>
-            )}
-          </Stack>
-
-          <SearchBox />
-        </Stack>
-
-        {!isMobile && (
-          <>
+    <AppBar position={isMobile ? "fixed" : "static"}>
+      <Toolbar sx={{ px: 0 }}>
+        <Container>
+          <Stack direction="row">
             <Stack
               direction="row"
-              spacing={2}
-              sx={{
-                flexGrow: 1,
-                justifyContent: "flex-end",
-              }}
+              alignItems="center"
+              display="flex"
+              justifyContent="space-between"
+              width={isMobile ? "100%" : "auto"}
             >
-              <Button
-                component={Link}
-                to="/cart"
-                startIcon={
-                  <Badge badgeContent={totalItemsInCart} color="error">
-                    <ShoppingCartIcon />
-                  </Badge>
-                }
-              >
-                CART
-              </Button>
+              <Stack direction="row" marginRight={1}>
+                {!isDesktop && <CategoryDrawer />}
 
-              {userInfo && userInfo.isAdmin && (
-                <Button
-                  aria-owns={adminAnchorEl ? "admin-menu" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleAdminClick}
-                  onMouseEnter={handleAdminClick}
-                  onMouseLeave={handleCloseAdminHover}
-                  startIcon={<AdminIcon />}
-                >
-                  ADMIN
-                </Button>
-              )}
+                {isMobile ? (
+                  <IconButton component={Link} to="/">
+                    <img src={logoUrl} alt="logo" className={styles.logo} />
+                  </IconButton>
+                ) : (
+                  <Button
+                    component={Link}
+                    to="/"
+                    sx={{ fontSize: 20 }}
+                    startIcon={
+                      <img src={logoUrl} alt="logo" className={styles.logo} />
+                    }
+                  >
+                    PROSHOP
+                  </Button>
+                )}
+              </Stack>
 
-              {userInfo ? (
-                <IconButton
-                  aria-owns={profileAnchorEl ? "profile-menu" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleProfileClick}
-                  onMouseEnter={handleProfileClick}
-                  onMouseLeave={handleCloseProfileHover}
-                >
-                  <Avatar sizes="small">
-                    {userInfo.name.split(" ").map((name) => name[0])}
-                  </Avatar>
-                </IconButton>
-              ) : (
-                <Button
-                  aria-owns={accountAnchorEl ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleAccountClick}
-                  onMouseEnter={handleAccountClick}
-                  onMouseLeave={handleCloseAccountHover}
-                  startIcon={<PersonIcon />}
-                >
-                  ACCOUNT
-                </Button>
-              )}
+              <SearchBox />
             </Stack>
 
-            <Menu
-              id="admin-menu"
-              anchorEl={adminAnchorEl}
-              open={Boolean(adminAnchorEl)}
-              onClose={handleCloseAdmin}
-              MenuListProps={{
-                onMouseEnter: handleAdminHover,
-                onMouseLeave: handleCloseAdminHover,
-                style: { pointerEvents: "auto" },
-              }}
-              getContentAnchorEl={null}
-              anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-              PopoverClasses={{
-                root: styles.popOverRoot,
-              }}
-            >
-              <NavMenuItem
-                label="Users"
-                icon={<PeopleIcon fontSize="small" />}
-                route="/admin/users"
-                handleClose={handleCloseAdmin}
-              />
-              <NavMenuItem
-                label="Products"
-                icon={<ShoppingBasketIcon fontSize="small" />}
-                route="/admin/products"
-                handleClose={handleCloseAdmin}
-              />
-              <NavMenuItem
-                label="Orders"
-                icon={<OrdersIcon fontSize="small" />}
-                route="/admin/orders"
-                handleClose={handleCloseAdmin}
-              />
-            </Menu>
+            {!isMobile && (
+              <>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  sx={{
+                    flexGrow: 1,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Button
+                    component={Link}
+                    to="/cart"
+                    startIcon={
+                      <Badge badgeContent={totalItemsInCart} color="error">
+                        <ShoppingCartIcon />
+                      </Badge>
+                    }
+                  >
+                    CART
+                  </Button>
 
-            <Menu
-              id="account-menu"
-              anchorEl={accountAnchorEl}
-              open={Boolean(accountAnchorEl)}
-              onClose={handleCloseAccount}
-              MenuListProps={{
-                onMouseEnter: handleAccountHover,
-                onMouseLeave: handleCloseAccountHover,
-                style: { pointerEvents: "auto" },
-              }}
-              getContentAnchorEl={null}
-              anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-              PopoverClasses={{
-                root: styles.popOverRoot,
-              }}
-            >
-              <NavMenuItem
-                label="Login"
-                icon={<LoginIcon fontSize="small" />}
-                route="/login"
-                handleClose={handleCloseAccount}
-              />
-              <NavMenuItem
-                label="Sign Up"
-                icon={<PersonAddIcon fontSize="small" />}
-                route="/register"
-                handleClose={handleCloseAccount}
-              />
-            </Menu>
+                  {userInfo && userInfo.isAdmin && (
+                    <Button
+                      aria-owns={adminAnchorEl ? "admin-menu" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleAdminClick}
+                      onMouseEnter={handleAdminClick}
+                      onMouseLeave={handleCloseAdminHover}
+                      startIcon={<AdminIcon />}
+                    >
+                      ADMIN
+                    </Button>
+                  )}
 
-            <Menu
-              id="profile-menu"
-              anchorEl={profileAnchorEl}
-              open={Boolean(profileAnchorEl)}
-              onClose={handleCloseProfile}
-              MenuListProps={{
-                onMouseEnter: handleProfileHover,
-                onMouseLeave: handleCloseProfileHover,
-                style: { pointerEvents: "auto" },
-              }}
-              getContentAnchorEl={null}
-              anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-              PopoverClasses={{
-                root: styles.popOverRoot,
-              }}
-            >
-              <NavMenuItem
-                label="Profile"
-                icon={<PersonIcon fontSize="small" />}
-                route="/profile"
-                handleClose={handleCloseProfile}
-              />
-              <NavMenuItem
-                label="Logout"
-                icon={<LogoutIcon fontSize="small" />}
-                onClick={handleLogout}
-                handleClose={handleCloseProfile}
-              />
-            </Menu>
-          </>
-        )}
+                  {userInfo ? (
+                    <IconButton
+                      aria-owns={profileAnchorEl ? "profile-menu" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleProfileClick}
+                      onMouseEnter={handleProfileClick}
+                      onMouseLeave={handleCloseProfileHover}
+                    >
+                      <Avatar sizes="small">
+                        {userInfo.name.split(" ").map((name) => name[0])}
+                      </Avatar>
+                    </IconButton>
+                  ) : (
+                    <Button
+                      aria-owns={accountAnchorEl ? "account-menu" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleAccountClick}
+                      onMouseEnter={handleAccountClick}
+                      onMouseLeave={handleCloseAccountHover}
+                      startIcon={<PersonIcon />}
+                    >
+                      ACCOUNT
+                    </Button>
+                  )}
+                </Stack>
+
+                <Menu
+                  id="admin-menu"
+                  anchorEl={adminAnchorEl}
+                  open={Boolean(adminAnchorEl)}
+                  onClose={handleCloseAdmin}
+                  MenuListProps={{
+                    onMouseEnter: handleAdminHover,
+                    onMouseLeave: handleCloseAdminHover,
+                    style: { pointerEvents: "auto" },
+                  }}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                  PopoverClasses={{
+                    root: styles.popOverRoot,
+                  }}
+                >
+                  <NavMenuItem
+                    label="Users"
+                    icon={<PeopleIcon fontSize="small" />}
+                    route="/admin/users"
+                    handleClose={handleCloseAdmin}
+                  />
+                  <NavMenuItem
+                    label="Products"
+                    icon={<ShoppingBasketIcon fontSize="small" />}
+                    route="/admin/products"
+                    handleClose={handleCloseAdmin}
+                  />
+                  <NavMenuItem
+                    label="Orders"
+                    icon={<OrdersIcon fontSize="small" />}
+                    route="/admin/orders"
+                    handleClose={handleCloseAdmin}
+                  />
+                </Menu>
+
+                <Menu
+                  id="account-menu"
+                  anchorEl={accountAnchorEl}
+                  open={Boolean(accountAnchorEl)}
+                  onClose={handleCloseAccount}
+                  MenuListProps={{
+                    onMouseEnter: handleAccountHover,
+                    onMouseLeave: handleCloseAccountHover,
+                    style: { pointerEvents: "auto" },
+                  }}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                  PopoverClasses={{
+                    root: styles.popOverRoot,
+                  }}
+                >
+                  <NavMenuItem
+                    label="Login"
+                    icon={<LoginIcon fontSize="small" />}
+                    route="/login"
+                    handleClose={handleCloseAccount}
+                  />
+                  <NavMenuItem
+                    label="Sign Up"
+                    icon={<PersonAddIcon fontSize="small" />}
+                    route="/register"
+                    handleClose={handleCloseAccount}
+                  />
+                </Menu>
+
+                <Menu
+                  id="profile-menu"
+                  anchorEl={profileAnchorEl}
+                  open={Boolean(profileAnchorEl)}
+                  onClose={handleCloseProfile}
+                  MenuListProps={{
+                    onMouseEnter: handleProfileHover,
+                    onMouseLeave: handleCloseProfileHover,
+                    style: { pointerEvents: "auto" },
+                  }}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                  PopoverClasses={{
+                    root: styles.popOverRoot,
+                  }}
+                >
+                  <NavMenuItem
+                    label="Profile"
+                    icon={<PersonIcon fontSize="small" />}
+                    route="/profile"
+                    handleClose={handleCloseProfile}
+                  />
+                  <NavMenuItem
+                    label="Logout"
+                    icon={<LogoutIcon fontSize="small" />}
+                    onClick={handleLogout}
+                    handleClose={handleCloseProfile}
+                  />
+                </Menu>
+              </>
+            )}
+          </Stack>
+        </Container>
       </Toolbar>
     </AppBar>
   );

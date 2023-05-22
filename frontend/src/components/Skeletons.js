@@ -651,7 +651,7 @@ const HomePageHotCategoriesSkeleton = () => {
           },
         }}
       >
-        {Array.from({ length: isDesktop ? 10 : 8 }, (_, i) => (
+        {Array.from({ length: isMobile ? 8 : 10 }, (_, i) => (
           <Grid item key={i} xs={isMobile ? 3 : 0}>
             <CategoryGridItemSkeleton />
           </Grid>

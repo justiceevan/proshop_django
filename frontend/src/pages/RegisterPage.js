@@ -1,115 +1,156 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import FormContainer from "../components/FormContainer";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
+import Joi from "joi";
+import {
+  Divider,
+  IconButton,
+  Typography,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SignUpIcon from "@mui/icons-material/PersonAddOutlined";
+import { toast } from "react-toastify";
+
+import {
+  FormContainer,
+  submitHandler,
+  renderFormField,
+  renderSubmitButton,
+  renderSocialButtons,
+} from "../components/Form";
+
 import { register, clearError } from "../store/user";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
   const [searchParams] = useSearchParams();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const params = [...searchParams];
 
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [re_password, setRe_password] = useState("");
+
+  const schema = Joi.object({
+    firstName: Joi.string().required().label("First Name"),
+    lastName: Joi.string().required().label("Last Name"),
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required()
+      .label("Email"),
+    password: Joi.string()
+      .min(8)
+      .max(30)
+      .regex(/^(?=.*[a-z])/)
+      .message("Password must contain at least one lowercase letter")
+      .regex(/^(?=.*[A-Z])/)
+      .message("Password must contain at least one uppercase letter")
+      .regex(/^(?=.*\d)/)
+      .message("Password must contain at least one number")
+      .regex(/^(?=.*[@$!#%*?&])/)
+      .message("Password must contain at least one special character")
+      .required()
+      .label("Password")
+      .messages({
+        "string.base": "Password should be a string",
+        "string.min": "Password must be at least 8 characters long",
+        "string.max": "Password cannot be more than 30 characters",
+        "any.required": "Password is required",
+      }),
+    re_password: Joi.string()
+      .valid(Joi.ref("password"))
+      .required()
+      .label("Confirm Password")
+      .messages({
+        "any.only": "Confirm Password must match Password",
+        "any.required": "Confirm Password is required",
+      }),
+  });
 
   const userSlice = useSelector((state) => state.user);
   const { userInfo, loading, error } = userSlice;
 
-  const redirect = params.length > 0 ? params[0][1] : "/";
+  const redirect = params.length > 0 ? params[0][1] : "";
 
   useEffect(() => {
-    if (userInfo) navigate(redirect);
+    if (userInfo) navigate(`/${redirect}`);
     dispatch(clearError());
-  }, [userInfo, navigate, redirect]);
+  }, [userInfo, dispatch, navigate, redirect]);
+
+  const onChangeAction = () => {
+    error && dispatch(clearError());
+  };
+
+  const submitAction = () => {
+    dispatch(clearError());
+    // TODO: Add last name to the register action
+    dispatch(register(firstName, email, password));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setMessage("");
-
-    if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
-    } else {
-      dispatch(register(name, email, password));
-    }
+    const data = { firstName, lastName, email, password, re_password };
+    submitHandler(e, data, schema, submitAction);
   };
 
   return (
-    <FormContainer>
-      <h1>Sign Up</h1>
+    <>
+      {error && toast.error(error) && null}
 
-      {message && <Message variant="danger"> {message} </Message>}
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
+      {isMobile && (
+        <IconButton onClick={() => navigate(-1)} size="large" aria-label="back">
+          <ArrowBackIcon fontSize="large" />
+        </IconButton>
+      )}
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            value={name}
-            required
-            placeholder="Enter name"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            required
-            placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
+      <FormContainer
+        title="Welcome to Proshop!"
+        subtitle="Enter your details to create your account."
+        onSubmit={handleSubmit}
+      >
+        <Stack direction="row" spacing={0.5} justifyContent="space-between">
+          {renderFormField("First Name", "text", setFirstName, onChangeAction)}
+          {renderFormField("Last Name", "text", setLastName, onChangeAction)}
+        </Stack>
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            required
-            placeholder="Enter password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
+        {renderFormField("Email", "email", setEmail, onChangeAction)}
+        {renderFormField(
+          "Password", // label
+          "password", // type
+          setPassword, // setAction
+          onChangeAction, // onChangeAction
+          "", // placeholder - use default
+          true, // required
+          true // validate
+        )}
+        {renderFormField(
+          "Confirm Password",
+          "password",
+          setRe_password,
+          onChangeAction,
+          "Confirm Password"
+        )}
+        {renderSubmitButton("Sign up", loading, <SignUpIcon />)}
 
-        <Form.Group controlId="confirmPassword">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={confirmPassword}
-            required
-            placeholder="Confirm password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </Form.Group>
+        <Divider sx={{ mt: 2 }}>Or sign up with</Divider>
 
-        <br />
+        {renderSocialButtons()}
 
-        <Button type="submit" variant="primary">
-          Sign Up
-        </Button>
-      </Form>
-
-      <Row>
-        <Col className="py-3">
-          Already have an account ?{" "}
-          <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
-            Login
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2">Have an account?</Typography>
+          <Link to="/login">Sign in</Link>
+        </Stack>
+      </FormContainer>
+    </>
   );
 };
 

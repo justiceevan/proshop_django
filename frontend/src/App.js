@@ -1,5 +1,5 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Container } from "@mui/material";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useTheme, useMediaQuery } from "@mui/material";
@@ -87,7 +87,7 @@ function App() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <div style={{ backgroundColor: "#f8f8f8", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#f1f1f1", minHeight: "100vh" }}>
       <Router>
         <ThemeProvider theme={navigationTheme}>
           <Navbar />
