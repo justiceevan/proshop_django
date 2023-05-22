@@ -21,7 +21,7 @@ const slice = createSlice({
       user.userInfo = action.payload;
       user.loading = false;
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
-      window.location.reload(true);
+      // window.location.reload(true);
     },
 
     userInfoRequestFailed: (user, action) => {

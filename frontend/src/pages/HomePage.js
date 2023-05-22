@@ -1,69 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { Grid, Box, Button, Alert } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import Product from "../components/Product";
-import Loader from "../components/Loader";
-import Message from "../components/Message";
-import Pagination from "../components/Pagination";
-import ProductCarousel from "../components/ProductCarousel";
-import { paginate } from "../utils/paginate";
+import HomePageHeader from "../components/HomePageHeader";
+import { ProductSkeleton } from "../components/Skeletons";
+
 import { loadProducts } from "../store/products";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
 
-  const pageSize = 4;
-  const [currentPage, setCurrentPage] = useState(1);
-
+  const [productsToShow, setProductsToShow] = useState(24);
   const productsSlice = useSelector((state) => state.products);
   const { productsList: products, loading, error } = productsSlice;
 
-  const searchQuery = searchParams.get("q");
-
   useEffect(() => {
-    if (searchQuery) {
-      dispatch(loadProducts(searchQuery));
-    } else {
-      dispatch(loadProducts());
-    }
-  }, [dispatch, searchQuery]);
+    dispatch(loadProducts());
+  }, [dispatch]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const handleLoadMoreClick = () => {
+    setProductsToShow(productsToShow + 24);
   };
-
-  const pagedProducts = paginate(products, currentPage, pageSize);
 
   return (
     <div>
-      {!searchQuery && <ProductCarousel />}
-
-      <h1>Latest Products</h1>
+      <HomePageHeader loading={loading} />
 
       {loading ? (
-        <Loader />
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            bgcolor: "white",
+            paddingBottom: 1,
+            paddingRight: 1,
+            borderRadius: "5px",
+            boxShadow: 3,
+            marginTop: 2,
+          }}
+        >
+          {[...Array(24)].map((_, index) => (
+            <Grid key={index} item xs={6} sm={4} md={3} lg={2}>
+              <ProductSkeleton />
+            </Grid>
+          ))}
+        </Grid>
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Alert severity="error" variant="outlined" sx={{ marginTop: 2 }}>
+          {error}
+        </Alert>
       ) : (
         <div>
-          <Row>
-            {pagedProducts.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+          <Grid
+            container
+            spacing={1}
+            sx={{
+              bgcolor: "white",
+              paddingBottom: 1,
+              paddingRight: 1,
+              borderRadius: "5px",
+              boxShadow: 3,
+              marginTop: 2,
+            }}
+          >
+            {products.slice(0, productsToShow).map((product) => (
+              <Grid key={product._id} item xs={6} sm={4} md={3} lg={2}>
                 <Product product={product} />
-              </Col>
+              </Grid>
             ))}
-          </Row>
+          </Grid>
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Pagination
-              itemsCount={products.length}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
-          </div>
+          {productsToShow < products.length && (
+            <Box mt={2} display="flex" justifyContent="center">
+              <Button
+                color="inherit"
+                onClick={handleLoadMoreClick}
+                variant="contained"
+                endIcon={<ExpandMoreIcon />}
+              >
+                Show More
+              </Button>
+            </Box>
+          )}
         </div>
       )}
     </div>

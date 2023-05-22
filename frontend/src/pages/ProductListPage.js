@@ -69,6 +69,7 @@ const ProductListPage = () => {
               <th>Name</th>
               <th>Price</th>
               <th>Category</th>
+              <th>Sub Category</th>
               <th>Brand</th>
               <th></th>
             </tr>
@@ -80,7 +81,8 @@ const ProductListPage = () => {
                 <td>{product._id}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
-                <td>{product.category}</td>
+                <td>{product.category && product.category.name}</td>
+                <td>{product.category && product.category.sub_category}</td>
                 <td>{product.brand}</td>
 
                 <td>

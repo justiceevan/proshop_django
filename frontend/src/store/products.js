@@ -9,6 +9,8 @@ const slice = createSlice({
     topRatedProducts: [],
     loading: false,
     error: null,
+    lastFetch: null,
+    searchQuery: "",
 
     successDelete: false,
     successCreate: false,
@@ -25,6 +27,11 @@ const slice = createSlice({
     productsReceived: (products, action) => {
       products.productsList = action.payload;
       products.loading = false;
+      products.lastFetch = Date.now();
+    },
+
+    searchQueryChanged: (products, action) => {
+      products.searchQuery = action.payload;
     },
 
     productsRequestFailed: (products, action) => {
@@ -43,7 +50,6 @@ const slice = createSlice({
         (product) => product._id === action.payload._id
       );
       products.productsList[index] = action.payload;
-      window.location.reload();
     },
 
     createdProductRemoved: (products) => {
@@ -78,6 +84,7 @@ const slice = createSlice({
 const {
   productsRequested,
   productsReceived,
+  searchQueryChanged,
   productsRequestFailed,
   productCreated,
   productUpdated,
@@ -93,7 +100,14 @@ export default slice.reducer;
 
 export const loadProducts =
   (searchQuery = "") =>
-  (dispatch) => {
+  (dispatch, getState) => {
+    const { lastFetch, searchQuery: srcQuery } = getState().products;
+    const diffInMinutes = (Date.now() - lastFetch) / (1000 * 60);
+
+    let byPassCache = !(searchQuery === srcQuery);
+
+    if (diffInMinutes < 10 && !byPassCache) return;
+
     dispatch(
       apiCallBegun({
         url: `/api/products?query=${searchQuery}`,
@@ -102,6 +116,8 @@ export const loadProducts =
         onStart: productsRequested.type,
       })
     );
+
+    dispatch({ type: searchQueryChanged.type, payload: searchQuery });
   };
 
 export const createProduct = () => (dispatch, getState) => {

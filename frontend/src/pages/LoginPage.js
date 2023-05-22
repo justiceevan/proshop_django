@@ -1,21 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import FormContainer from "../components/FormContainer";
-import Message from "../components/Message";
-import Loader from "../components/Loader";
+import Joi from "joi";
+import {
+  Divider,
+  IconButton,
+  Typography,
+  Stack,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LoginIcon from "@mui/icons-material/Login";
+import { toast } from "react-toastify";
+
+import {
+  FormContainer,
+  submitHandler,
+  renderFormField,
+  renderSubmitButton,
+  renderSocialButtons,
+} from "../components/Form";
+
 import { login, clearError } from "../store/user";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
   const [searchParams] = useSearchParams();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const params = [...searchParams];
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({ tlds: { allow: false } })
+      .required()
+      .label("Email"),
+    password: Joi.string().required().label("Password"),
+  });
 
   const userSlice = useSelector((state) => state.user);
   const { userInfo, loading, error } = userSlice;
@@ -25,56 +53,52 @@ const LoginPage = () => {
   useEffect(() => {
     if (userInfo) navigate(`/${redirect}`);
     dispatch(clearError());
-  }, [userInfo, navigate, redirect]);
+  }, [userInfo, dispatch, navigate, redirect]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onChangeAction = () => {
+    error && dispatch(clearError());
+  };
+
+  const submitAction = () => {
+    dispatch(clearError());
     dispatch(login(email, password));
   };
 
+  const handleSubmit = (e) => {
+    const data = { email, password };
+    submitHandler(e, data, schema, submitAction);
+  };
+
   return (
-    <FormContainer>
-      <h1>Sign In</h1>
+    <>
+      {error && toast.error(error) && null}
 
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
+      {isMobile && (
+        <IconButton onClick={() => navigate(-1)} size="large" aria-label="back">
+          <ArrowBackIcon fontSize="large" />
+        </IconButton>
+      )}
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
+      <FormContainer
+        title="Welcome Back!"
+        subtitle="Type your email and password to login to your Proshop account."
+        onSubmit={handleSubmit}
+      >
+        {renderFormField("Email", "email", setEmail, onChangeAction)}
+        {renderFormField("Password", "password", setPassword, onChangeAction)}
+        <Link to="/reset-password">Forgot password?</Link>
+        {renderSubmitButton("Log in", loading, <LoginIcon />)}
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            placeholder="Enter password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
+        <Divider sx={{ mt: 2 }}>Or log in with</Divider>
 
-        <br />
-        <Button type="submit" variant="primary">
-          Sign In
-        </Button>
-      </Form>
+        {renderSocialButtons()}
 
-      <Row>
-        <Col className="py-3">
-          New Customer ?{" "}
-          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Register
-          </Link>
-        </Col>
-      </Row>
-    </FormContainer>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2">Don't have an account?</Typography>
+          <Link to="/register">Sign up</Link>
+        </Stack>
+      </FormContainer>
+    </>
   );
 };
 

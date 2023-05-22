@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import RefreshToken
 from .models import Product, Order, OrderItem, ShippingAddress, Review, Category, SubCategory
 
@@ -71,6 +71,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
     category = serializers.SerializerMethodField(read_only=True)
+    image_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
@@ -89,6 +90,9 @@ class ProductSerializer(serializers.ModelSerializer):
                 'slug': obj.category.slug,
                 'cat_slug': obj.category.category.slug,
             }
+
+    def get_image_name(self, obj):
+        return obj.image.name.split('/')[-1]
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
