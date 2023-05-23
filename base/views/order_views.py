@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from datetime import datetime
 
 from rest_framework.response import Response
@@ -7,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
 from base.models import Product, Order, OrderItem, ShippingAddress
-from base.serializer import ProductSerializer, OrderSerializer
+from base.serializer import OrderSerializer
 
 
 @api_view(['POST'])
