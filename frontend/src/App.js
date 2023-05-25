@@ -6,27 +6,31 @@ import { useTheme, useMediaQuery } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 
-import Navbar from "./components/Navbar";
+import ActivationPage from "./pages/ActivationPage";
 import BottomBar from "./components/BottomBar";
+import CartPage from "./pages/CartPage";
+import CategoryPage from "./pages/CategoryPage";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
-import CategoryPage from "./pages/CategoryPage";
-import ProductPage from "./pages/ProductPage";
-import CartPage from "./pages/CartPage";
 import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import ShippingPage from "./pages/ShippingPage";
+import Navbar from "./components/Navbar";
+import NotVerifiedPage from "./pages/NotVerifiedPage";
+import OrderListPage from "./pages/OrderListPage";
+import OrderPage from "./pages/OrderPage";
+import PageNotFound from "./pages/PageNotFound";
 import PaymentPage from "./pages/PaymentPage";
 import PlaceorderPage from "./pages/PlaceorderPage";
-import OrderPage from "./pages/OrderPage";
-import UserListPage from "./pages/UserListPage";
-import ProductListPage from "./pages/ProductListPage";
-import UserEditPage from "./pages/UserEditPage";
 import ProductEditPage from "./pages/ProductEditPage";
-import OrderListPage from "./pages/OrderListPage";
+import ProductListPage from "./pages/ProductListPage";
+import ProductPage from "./pages/ProductPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
+import RequestPasswordReset from "./pages/RequestPasswordReset";
+import ResetPassword from "./pages/ResetPassword";
 import SearchPage from "./pages/SearchPage";
-import PageNotFound from "./pages/PageNotFound";
+import ShippingPage from "./pages/ShippingPage";
+import UserEditPage from "./pages/UserEditPage";
+import UserListPage from "./pages/UserListPage";
 
 const navigationTheme = createTheme({
   components: {
@@ -112,6 +116,23 @@ function App() {
               <Route path="/cart/:id" element={<CartPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/not-verified" element={<NotVerifiedPage />} />
+              <Route
+                path="/not-verified/:email"
+                element={<NotVerifiedPage />}
+              />
+              <Route
+                path="/activate/:uid/:token"
+                element={<ActivationPage />}
+              />
+              <Route
+                path="/reset-password"
+                element={<RequestPasswordReset />}
+              />
+              <Route
+                path="/reset-password/:uid/:token"
+                element={<ResetPassword />}
+              />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/shipping" element={<ShippingPage />} />
               <Route path="/payment" element={<PaymentPage />} />

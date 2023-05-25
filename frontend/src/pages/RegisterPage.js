@@ -23,7 +23,7 @@ import {
   renderSocialButtons,
 } from "../components/Form";
 
-import { register, clearError } from "../store/user";
+import { signup, clearError } from "../store/user";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -78,14 +78,21 @@ const RegisterPage = () => {
   });
 
   const userSlice = useSelector((state) => state.user);
-  const { userInfo, loading, error } = userSlice;
+  const { isAuthenticated, successSignUp, loading, error } = userSlice;
+
+  console.log(successSignUp);
 
   const redirect = params.length > 0 ? params[0][1] : "";
 
   useEffect(() => {
-    if (userInfo) navigate(`/${redirect}`);
     dispatch(clearError());
-  }, [userInfo, dispatch, navigate, redirect]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate(`/${redirect}`);
+    if (successSignUp) navigate("/not-verified");
+    dispatch(clearError());
+  }, [isAuthenticated, successSignUp, dispatch, navigate, redirect]);
 
   const onChangeAction = () => {
     error && dispatch(clearError());
@@ -93,8 +100,7 @@ const RegisterPage = () => {
 
   const submitAction = () => {
     dispatch(clearError());
-    // TODO: Add last name to the register action
-    dispatch(register(firstName, email, password));
+    dispatch(signup(firstName, lastName, email, password));
   };
 
   const handleSubmit = (e) => {
