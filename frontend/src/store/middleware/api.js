@@ -27,10 +27,21 @@ const api =
       // Specific Success
       if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
     } catch (error) {
-      const errorMessage =
+      console.log({ error });
+      let errorMessage =
         error.response && error.response.data.detail
           ? error.response.data.detail
           : error.message;
+
+      errorMessage =
+        error.response && error.response.data.email
+          ? error.response.data.email[0]
+          : errorMessage;
+
+      errorMessage =
+        error.response && error.response.data.token
+          ? error.response.data.token[0]
+          : errorMessage;
 
       // General Error
       dispatch(actions.apiCallFailed(errorMessage));
