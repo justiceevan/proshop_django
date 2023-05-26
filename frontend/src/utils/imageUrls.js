@@ -13,4 +13,9 @@ const commentImageUrl =
     ? "https://proshop.blob.core.windows.net/proshop-container/no-comment.png"
     : "/images/no-comment.png";
 
-export { logoUrl, notFoundUrl, commentImageUrl };
+const cartImageUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://proshop.blob.core.windows.net/proshop-container/shopping-cart.jpg"
+    : "/images/shopping-cart.jpg";
+
+export { logoUrl, notFoundUrl, commentImageUrl, cartImageUrl };

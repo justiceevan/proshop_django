@@ -19,10 +19,7 @@ import { toast } from "react-toastify";
 
 import { addItemToCart, removeCartItem } from "../store/cart";
 
-const cartImageUrl =
-  process.env.NODE_ENV === "production"
-    ? "https://proeshopstorage.blob.core.windows.net/proshopcontainer/shopping-cart.jpg"
-    : "/images/shopping-cart.jpg";
+import { cartImageUrl } from "../utils/imageUrls";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -126,7 +123,7 @@ const CartPage = () => {
         height="100px"
         width="100px"
         loading="lazy"
-        alt="no comment"
+        alt="cart"
         style={{
           borderRadius: "50%",
         }}

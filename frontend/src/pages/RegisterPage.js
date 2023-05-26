@@ -20,10 +20,10 @@ import {
   submitHandler,
   renderFormField,
   renderSubmitButton,
-  renderSocialButtons,
+  renderGoogleButton,
 } from "../components/Form";
 
-import { register, clearError } from "../store/user";
+import { signup, clearError } from "../store/user";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -78,14 +78,19 @@ const RegisterPage = () => {
   });
 
   const userSlice = useSelector((state) => state.user);
-  const { userInfo, loading, error } = userSlice;
+  const { isAuthenticated, successSignUp, loading, error } = userSlice;
 
   const redirect = params.length > 0 ? params[0][1] : "";
 
   useEffect(() => {
-    if (userInfo) navigate(`/${redirect}`);
     dispatch(clearError());
-  }, [userInfo, dispatch, navigate, redirect]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate(`/${redirect}`);
+    if (successSignUp) navigate("/not-verified");
+    dispatch(clearError());
+  }, [isAuthenticated, successSignUp, dispatch, navigate, redirect]);
 
   const onChangeAction = () => {
     error && dispatch(clearError());
@@ -93,8 +98,7 @@ const RegisterPage = () => {
 
   const submitAction = () => {
     dispatch(clearError());
-    // TODO: Add last name to the register action
-    dispatch(register(firstName, email, password));
+    dispatch(signup(firstName, lastName, email, password));
   };
 
   const handleSubmit = (e) => {
@@ -141,11 +145,11 @@ const RegisterPage = () => {
         )}
         {renderSubmitButton("Sign up", loading, <SignUpIcon />)}
 
-        <Divider sx={{ mt: 2 }}>Or sign up with</Divider>
+        <Divider sx={{ my: 1 }}>Or sign up with</Divider>
 
-        {renderSocialButtons()}
+        {renderGoogleButton()}
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" mt={2} spacing={1} alignItems="center">
           <Typography variant="body2">Have an account?</Typography>
           <Link to="/login">Sign in</Link>
         </Stack>

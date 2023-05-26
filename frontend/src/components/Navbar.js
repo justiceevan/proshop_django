@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -29,7 +29,7 @@ import CategoryDrawer from "./CategoryDrawer";
 import SearchBox from "./SearchBox";
 import NavMenuItem from "./NavMenuItem";
 
-import { logout } from "../store/user";
+import { checkAuthentication, loadUser, logout } from "../store/user";
 
 import { logoUrl } from "../utils/imageUrls";
 
@@ -54,9 +54,8 @@ function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
-  const width = window.innerWidth;
 
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
 
   let totalItemsInCart = 0;
@@ -69,6 +68,11 @@ function Navbar() {
   const [adminAnchorEl, setAdminAnchorEl] = useState(null);
   const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [accountAnchorEl, setAccountAnchorEl] = useState(null);
+
+  useEffect(() => {
+    dispatch(checkAuthentication());
+    isAuthenticated && dispatch(loadUser());
+  }, [dispatch, isAuthenticated]);
 
   function handleAdminClick(event) {
     if (adminAnchorEl !== event.currentTarget) {
@@ -210,7 +214,7 @@ function Navbar() {
                     </Button>
                   )}
 
-                  {userInfo ? (
+                  {userInfo?.is_active ? (
                     <IconButton
                       aria-owns={profileAnchorEl ? "profile-menu" : undefined}
                       aria-haspopup="true"
@@ -219,7 +223,8 @@ function Navbar() {
                       onMouseLeave={handleCloseProfileHover}
                     >
                       <Avatar sizes="small">
-                        {userInfo.name.split(" ").map((name) => name[0])}
+                        {userInfo.first_name[0]}
+                        {userInfo.last_name[0]}
                       </Avatar>
                     </IconButton>
                   ) : (
