@@ -3,7 +3,7 @@ from .settings import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['pro-eshop.azurewebsites.net']
+ALLOWED_HOSTS = ['proshop-eshop.azurewebsites.net']
 
 MEDIA_ROOT = ''
 MEDIA_URL = 'https://proshopstorage.blob.core.windows.net/proshopcontainer/images/'
@@ -20,7 +20,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('APP_DB_NAME'),
-        'USER': '{}@{}'.format(os.environ.get('POSTGRES_ADMIN_USER'), os.environ.get('POSTGRES_SERVER_NAME')),
+        'USER': os.environ.get('POSTGRES_ADMIN_USER'),
         'PASSWORD': os.environ.get('POSTGRES_ADMIN_PASSWORD'),
         'HOST': os.environ.get('POSTGRES_HOST'),
         'PORT': '5432',

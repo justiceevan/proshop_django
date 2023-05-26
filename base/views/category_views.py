@@ -1,12 +1,14 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework import status
 
 from base.models import Category, SubCategory
 from base.serializer import CategorySerializer, SubCategorySerializer
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getCategories(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -14,6 +16,7 @@ def getCategories(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getCategory(request, pk):
     category = Category.objects.get(_id=pk)
     serializer = CategorySerializer(category, many=False)
@@ -21,6 +24,7 @@ def getCategory(request, pk):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getSubCategories(request):
     subCategories = SubCategory.objects.all()
     serializer = SubCategorySerializer(subCategories, many=True)
@@ -28,6 +32,7 @@ def getSubCategories(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getSubCategory(request, pk):
     subCategory = SubCategory.objects.get(_id=pk)
     serializer = SubCategorySerializer(subCategory, many=False)
@@ -64,7 +69,9 @@ def updateCategory(request, pk):
 def deleteCategory(request, pk):
     category = Category.objects.get(_id=pk)
     category.delete()
-    return Response('Category Deleted')
+
+    content = {'detail': 'Category was successfully deleted'}
+    return Response(content, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -97,6 +104,7 @@ def updateSubCategory(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def uploadImage(request):
     data = request.data
 
@@ -106,7 +114,8 @@ def uploadImage(request):
     subCategory.image = request.FILES.get('image')
     subCategory.save()
 
-    return Response('Image was uploaded')
+    content = {'detail': 'Image uploaded'}
+    return Response(content, status=status.HTTP_200_OK)
 
 
 @api_view(['DELETE'])
@@ -114,4 +123,6 @@ def uploadImage(request):
 def deleteSubCategory(request, pk):
     subCategory = SubCategory.objects.get(_id=pk)
     subCategory.delete()
-    return Response('SubCategory Deleted')
+
+    content = {'detail': 'Sub category was successfully deleted'}
+    return Response(content, status=status.HTTP_200_OK)
