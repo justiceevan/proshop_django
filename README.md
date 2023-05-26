@@ -1,12 +1,61 @@
 # Proshop Ecommerce Web App
 
-- This is a simple ecommerce web application running on Django backend, React frontend and a PostgreSQL database.
+Proshop is a fake ecommerce web application built with Django and React. I repeat, it's a fake application so don't try buying anything using your real credit card.
 
-- The application is hosted on Azure and can be accessed through this [link](https://pro-eshop.azurewebsites.net/)
+The project was inspired by [Dennis Ivanov](https://www.dennisivy.com/) and [Brad Traversy](https://www.traversymedia.com/). I followed their tutorial on udemy [Django with React | An Ecommerce Website](https://www.udemy.com/course/django-with-react-an-ecommerce-website/) and added my own features to the project. Added features include:
 
-- To run the app in development mode, you need to have Python 3.6 or higher installed on your machine.
+- Improved the UI
+- Add filter feature
+- Add Hot categories - Most viewed products
+- Add product pagination
+- Improve user authentication - Email verification, Social authentication
 
-- Follow the steps below to run the app in development mode:
+(Ran out of credits on Azure so the app is currently down) The application is hosted on Azure and can be accessed through this [link](https://pro-eshop.azurewebsites.net/)
+
+## Features
+
+The application has most of the features you would expect to find in an ecommerce web application. Some of the features include:
+
+- User authentication
+- Product reviews and ratings
+- Product search feature
+- Hot categories - Most viewed products
+- Product pagination
+- Product filtering based on - Category, Price, Rating, Brand
+- Shopping cart
+- Checkout process (shipping, payment method, etc)
+- Order history
+- Admin product management
+- Admin user management
+- Admin order details page
+- Mark orders as delivered option
+- Checkout with PayPal
+
+## Technologies
+
+### Backend
+
+- [Django](https://www.djangoproject.com/)
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [Django REST Framework Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+- [Djoser](https://djoser.readthedocs.io/en/latest/)
+- [social-auth-app-django](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Frontend
+
+- [React](https://reactjs.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+
+## Usage
+
+### Prerequisites
+
+- [Python 3.6 or higher](https://www.python.org/downloads/)
+- [Node.js](https://nodejs.org/en/)
+- [PostgreSQL](https://www.postgresql.org/) (optional) - You can use any other database of your choice
+
+### Installation
 
 1. Clone the repository
 

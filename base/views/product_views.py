@@ -1,8 +1,6 @@
-from django.shortcuts import render
-
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import status
 
 from base.models import Product, Review, SubCategory
@@ -10,6 +8,7 @@ from base.serializer import ProductSerializer
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProducts(request):
     query = request.query_params.get('query')
 
@@ -23,6 +22,7 @@ def getProducts(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProductsByCategory(request, slug):
     sub_categories = SubCategory.objects.filter(category__slug=slug)
     products = Product.objects.filter(category__in=sub_categories)
@@ -31,6 +31,7 @@ def getProductsByCategory(request, slug):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProductsBySubCategory(request, slug):
     products = Product.objects.filter(category__slug=slug)
     serializer = ProductSerializer(products, many=True)
@@ -38,6 +39,7 @@ def getProductsBySubCategory(request, slug):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getTopRatedProducts(request):
     products = Product.objects.filter(rating__gte=4).order_by('-rating')[:5]
     serializer = ProductSerializer(products, many=True)
@@ -45,6 +47,7 @@ def getTopRatedProducts(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getProduct(request, pk):
     product = Product.objects.get(_id=pk)
     serializer = ProductSerializer(product, many=False)
@@ -97,20 +100,23 @@ def deleteProduct(request, pk):
     product = Product.objects.get(_id=pk)
     product.delete()
 
-    serializer = ProductSerializer(product, many=False)
-    return Response(serializer.data)
+    content = {'detail': 'Product deleted successfully'}
+    return Response(content, status=status.HTTP_200_OK)
 
 
 @api_view(['PUT'])
+@permission_classes([AllowAny])
 def incrementClickCount(request, pk):
     product = Product.objects.get(_id=pk)
     product.clickCount += 1
     product.save()
 
-    return Response('Click count was incremented')
+    content = {'detail': 'Click count was incremented'}
+    return Response(content, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getHotCategories(request):
     hot_categories = []
     products = Product.objects.all()
@@ -138,6 +144,7 @@ def getHotCategories(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def uploadImage(request):
     data = request.data
 
@@ -147,7 +154,9 @@ def uploadImage(request):
     product.image = request.FILES.get('image')
     product.save()
 
-    return Response('Image was uploaded')
+    content = {'detail': 'Image was uploaded'}
+
+    return Response(content, status=status.HTTP_202_ACCEPTED)
 
 
 @api_view(['POST'])
