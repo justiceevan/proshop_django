@@ -20,7 +20,7 @@ import {
   submitHandler,
   renderFormField,
   renderSubmitButton,
-  renderSocialButtons,
+  renderGoogleButton,
 } from "../components/Form";
 
 import { login, resendActivationLink, clearError } from "../store/user";
@@ -103,7 +103,7 @@ const LoginPage = () => {
             variant="outlined"
             color="inherit"
             sx={{
-              my: 2,
+              my: 1,
               fontWeight: 550,
               textTransform: "initial",
               "&:hover": {
@@ -117,11 +117,11 @@ const LoginPage = () => {
           </Button>
         )}
 
-        <Divider>Or log in with</Divider>
+        <Divider sx={{ my: 1 }}>Or </Divider>
 
-        {renderSocialButtons()}
+        {renderGoogleButton()}
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" mt={2} spacing={1} alignItems="center">
           <Typography variant="body2">Don't have an account?</Typography>
           <Link to="/register">Sign up</Link>
         </Stack>

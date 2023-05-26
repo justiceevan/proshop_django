@@ -259,7 +259,7 @@ export const loadUser = () => (dispatch) => {
   }
 };
 
-export const loginWithGoogle = (state, code) => async (dispatch) => {
+export const authenticateWithGoogle = (state, code) => async (dispatch) => {
   if (state && code && !localStorage.getItem("access")) {
     const headers = {
       "Content-Type": "application/x-www-form-urlencoded",

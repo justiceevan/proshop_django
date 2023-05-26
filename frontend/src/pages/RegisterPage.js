@@ -20,7 +20,7 @@ import {
   submitHandler,
   renderFormField,
   renderSubmitButton,
-  renderSocialButtons,
+  renderGoogleButton,
 } from "../components/Form";
 
 import { signup, clearError } from "../store/user";
@@ -79,8 +79,6 @@ const RegisterPage = () => {
 
   const userSlice = useSelector((state) => state.user);
   const { isAuthenticated, successSignUp, loading, error } = userSlice;
-
-  console.log(successSignUp);
 
   const redirect = params.length > 0 ? params[0][1] : "";
 
@@ -147,11 +145,11 @@ const RegisterPage = () => {
         )}
         {renderSubmitButton("Sign up", loading, <SignUpIcon />)}
 
-        <Divider sx={{ mt: 2 }}>Or sign up with</Divider>
+        <Divider sx={{ my: 1 }}>Or sign up with</Divider>
 
-        {renderSocialButtons()}
+        {renderGoogleButton()}
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" mt={2} spacing={1} alignItems="center">
           <Typography variant="body2">Have an account?</Typography>
           <Link to="/login">Sign in</Link>
         </Stack>

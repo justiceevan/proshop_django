@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/FacebookOutlined";
 
 import FormField from "./FormField";
 
+import httpService from "../utils/httpService";
 import { logoUrl } from "../utils/imageUrls";
 
 const renderFormField = (
@@ -64,27 +64,26 @@ const renderSubmitButton = (label, loading, icon) => {
   );
 };
 
-const renderSocialButtons = () => (
-  <Stack
-    direction="row"
-    display="flex"
-    sx={{
-      width: "100%",
-      my: 2,
-    }}
-    justifyContent="space-between"
-    alignItems="center"
-  >
+const renderGoogleButton = () => {
+  const handleContinueWithGoogle = async () => {
+    try {
+      const response = await httpService.get(
+        "/api/auth/o/google-oauth2/?redirect_uri=http://localhost:3000/"
+      );
+      window.location.replace(response.data.authorization_url);
+    } catch (error) {}
+  };
+
+  return (
     <Button
       variant="outlined"
       startIcon={<GoogleIcon />}
-      // onClick={handleGoogleLogin}
-      // disabled
+      onClick={handleContinueWithGoogle}
       fullWidth
       sx={{
-        maxWidth: "49%",
         borderRadius: 1,
         fontWeight: 600,
+        fontSize: 14,
         textTransform: "initial",
         "&:hover": {
           boxShadow: 3,
@@ -92,30 +91,10 @@ const renderSocialButtons = () => (
         },
       }}
     >
-      Google
+      Continue With Google
     </Button>
-
-    <Button
-      variant="contained"
-      startIcon={<FacebookIcon />}
-      // onClick={handleGoogleLogin}
-      // disabled
-      fullWidth
-      sx={{
-        maxWidth: "49%",
-        borderRadius: 1,
-        fontWeight: 600,
-        textTransform: "initial",
-        "&:hover": {
-          boxShadow: 3,
-          transform: "scale(1.02)",
-        },
-      }}
-    >
-      Facebook
-    </Button>
-  </Stack>
-);
+  );
+};
 
 const submitHandler = (e, data, schema, action) => {
   e.preventDefault();
@@ -206,6 +185,6 @@ export {
   submitHandler,
   renderFormField,
   renderSubmitButton,
-  renderSocialButtons,
+  renderGoogleButton,
   FormContainer,
 };
