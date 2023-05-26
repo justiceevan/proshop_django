@@ -5,6 +5,7 @@ import Joi from "joi";
 import {
   Divider,
   IconButton,
+  Button,
   Typography,
   Stack,
   useTheme,
@@ -19,10 +20,10 @@ import {
   submitHandler,
   renderFormField,
   renderSubmitButton,
-  renderSocialButtons,
+  renderGoogleButton,
 } from "../components/Form";
 
-import { login, clearError } from "../store/user";
+import { login, resendActivationLink, clearError } from "../store/user";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [notActivated, setNotActivated] = useState(false);
+
   const schema = Joi.object({
     email: Joi.string()
       .email({ tlds: { allow: false } })
@@ -46,14 +49,15 @@ const LoginPage = () => {
   });
 
   const userSlice = useSelector((state) => state.user);
-  const { userInfo, loading, error } = userSlice;
+  const { userInfo, isAuthenticated, loading, error } = userSlice;
 
   const redirect = params.length > 0 ? params[0][1] : "";
 
   useEffect(() => {
-    if (userInfo) navigate(`/${redirect}`);
+    if (isAuthenticated) navigate(`/${redirect}`);
+    error === "Your account is not activated" && setNotActivated(true);
     dispatch(clearError());
-  }, [userInfo, dispatch, navigate, redirect]);
+  }, [userInfo, dispatch, navigate, redirect, isAuthenticated, error]);
 
   const onChangeAction = () => {
     error && dispatch(clearError());
@@ -62,6 +66,11 @@ const LoginPage = () => {
   const submitAction = () => {
     dispatch(clearError());
     dispatch(login(email, password));
+  };
+
+  const handleRequestActivation = () => {
+    dispatch(resendActivationLink(email));
+    navigate(`/not-verified/${email}`);
   };
 
   const handleSubmit = (e) => {
@@ -89,11 +98,30 @@ const LoginPage = () => {
         <Link to="/reset-password">Forgot password?</Link>
         {renderSubmitButton("Log in", loading, <LoginIcon />)}
 
-        <Divider sx={{ mt: 2 }}>Or log in with</Divider>
+        {notActivated && (
+          <Button
+            variant="outlined"
+            color="inherit"
+            sx={{
+              my: 1,
+              fontWeight: 550,
+              textTransform: "initial",
+              "&:hover": {
+                boxShadow: 3,
+                transform: "scale(1.02)",
+              },
+            }}
+            onClick={handleRequestActivation}
+          >
+            Request Activation Link
+          </Button>
+        )}
 
-        {renderSocialButtons()}
+        <Divider sx={{ my: 1 }}>Or </Divider>
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        {renderGoogleButton()}
+
+        <Stack direction="row" mt={2} spacing={1} alignItems="center">
           <Typography variant="body2">Don't have an account?</Typography>
           <Link to="/register">Sign up</Link>
         </Stack>

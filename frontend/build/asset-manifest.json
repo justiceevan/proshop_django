@@ -1,20 +1,17 @@
 {
   "files": {
-    "main.css": "https://proshop.blob.core.windows.net/proshop-container/static/css/main.04d966f0.css",
-    "main.js": "https://proshop.blob.core.windows.net/proshop-container/static/js/main.d69242da.js",
-    "static/js/496.25abac0d.chunk.js": "https://proshop.blob.core.windows.net/proshop-container/static/js/496.25abac0d.chunk.js",
-    "static/media/fontawesome-webfont.svg?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
-    "static/media/fontawesome-webfont.eot": "https://proshop.blob.core.windows.net/proshop-container/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
-    "static/media/fontawesome-webfont.ttf?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
-    "static/media/fontawesome-webfont.woff?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
-    "static/media/fontawesome-webfont.woff2?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "main.css": "https://proshop.blob.core.windows.net/proshop-container/css/main.04d966f0.css",
+    "main.js": "https://proshop.blob.core.windows.net/proshop-container/js/main.6ad863e4.js",
+    "static/js/496.25abac0d.chunk.js": "https://proshop.blob.core.windows.net/proshop-container/js/496.25abac0d.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/fontawesome-webfont.eot": "https://proshop.blob.core.windows.net/proshop-container/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "https://proshop.blob.core.windows.net/proshop-container/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
     "index.html": "https://proshop.blob.core.windows.net/proshop-container/index.html",
-    "main.04d966f0.css.map": "https://proshop.blob.core.windows.net/proshop-container/static/css/main.04d966f0.css.map",
-    "main.d69242da.js.map": "https://proshop.blob.core.windows.net/proshop-container/static/js/main.d69242da.js.map",
-    "496.25abac0d.chunk.js.map": "https://proshop.blob.core.windows.net/proshop-container/static/js/496.25abac0d.chunk.js.map"
+    "main.04d966f0.css.map": "https://proshop.blob.core.windows.net/proshop-container/css/main.04d966f0.css.map",
+    "main.6ad863e4.js.map": "https://proshop.blob.core.windows.net/proshop-container/js/main.6ad863e4.js.map",
+    "496.25abac0d.chunk.js.map": "https://proshop.blob.core.windows.net/proshop-container/js/496.25abac0d.chunk.js.map"
   },
-  "entrypoints": [
-    "static/css/main.04d966f0.css",
-    "static/js/main.d69242da.js"
-  ]
+  "entrypoints": ["static/css/main.04d966f0.css", "static/js/main.6ad863e4.js"]
 }

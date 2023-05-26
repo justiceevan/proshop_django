@@ -38,7 +38,7 @@ function BottomBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
   const { product } = useSelector((state) => state.productDetails);
 
@@ -50,6 +50,10 @@ function BottomBar() {
   if (!path) {
     path = "/";
   }
+
+  // TODO: Implement all the necessary features on the bottom bar:
+  //  This include: change the highlighted icon to outlined when Active and update
+  //  the active icons when the user navigates to a different page
 
   const onProductPage = path.startsWith("/product/");
   const productId = onProductPage && path.split("/")[2];
@@ -199,12 +203,13 @@ function BottomBar() {
       )}
 
       {!onProductPage &&
-        (userInfo ? (
+        (userInfo?.is_active ? (
           <BottomNavigationAction
             onClick={handleProfileClick}
             icon={
               <Avatar sizes="small">
-                {userInfo.name.split(" ").map((name) => name[0])}
+                {userInfo.first_name[0]}
+                {userInfo.last_name[0]}
               </Avatar>
             }
           />
