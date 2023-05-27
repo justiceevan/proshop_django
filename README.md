@@ -1,35 +1,23 @@
-# Proshop Ecommerce Web App
+# Proshop API
 
-Proshop is a fake ecommerce web application built with Django and React. I repeat, it's a fake application so don't try buying anything using your real credit card.
+Proshop API is a RESTful API built with Django and Django REST Framework. It is the backend for the [Proshop](https://proshop-eshop.web.app/). Check out the [frontend repository](https://github.com/justicenyaga/proshop) for more details.
 
-The project was inspired by [Dennis Ivanov](https://www.dennisivy.com/) and [Brad Traversy](https://www.traversymedia.com/). I followed their tutorial on udemy [Django with React | An Ecommerce Website](https://www.udemy.com/course/django-with-react-an-ecommerce-website/) and added my own features to the project. Added features include:
+The project was inspired by [Dennis Ivanov](https://www.dennisivy.com/) and [Brad Traversy](https://www.traversymedia.com/). I followed their tutorial on udemy [Django with React | An Ecommerce Website](https://www.udemy.com/course/django-with-react-an-ecommerce-website/). I made some changes to the project to make it more interesting and to learn more about Django and React.
 
-- Improved the UI
-- Add filter feature
-- Add Hot categories - Most viewed products
-- Add product pagination
-- Improve user authentication - Email verification, Social authentication
-
-(Ran out of credits on Azure so the app is currently down) The application is hosted on Azure and can be accessed through this [link](https://pro-eshop.azurewebsites.net/)
+The API is hosted on Azure and can be accessed through this [link](https://proshop-eshop.azurewebsites.net/). The link will take you to the API home page which contains the various endpoints. A more detailed documentation will be provided soon.
 
 ## Features
 
-The application has most of the features you would expect to find in an ecommerce web application. Some of the features include:
+The API has most of the features you would expect to find in an ecommerce web application. Some of the features include:
 
 - User authentication
 - Product reviews and ratings
 - Product search feature
-- Hot categories - Most viewed products
-- Product pagination
-- Product filtering based on - Category, Price, Rating, Brand
-- Shopping cart
-- Checkout process (shipping, payment method, etc)
-- Order history
+- Making and managing orders
 - Admin product management
 - Admin user management
 - Admin order details page
-- Mark orders as delivered option
-- Checkout with PayPal
+- PayPal integration
 
 ## Technologies
 
@@ -42,20 +30,18 @@ The application has most of the features you would expect to find in an ecommerc
 - [social-auth-app-django](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html)
 - [PostgreSQL](https://www.postgresql.org/)
 
-### Frontend
-
-- [React](https://reactjs.org/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-
 ## Usage
 
 ### Prerequisites
 
 - [Python 3.6 or higher](https://www.python.org/downloads/)
-- [Node.js](https://nodejs.org/en/)
 - [PostgreSQL](https://www.postgresql.org/) (optional) - You can use any other database of your choice
 
 ### Installation
+
+I Will be providing a detailed documentation on this soon.
+
+<!--
 
 1. Clone the repository
 
@@ -123,4 +109,4 @@ The application has most of the features you would expect to find in an ecommerc
 
   ```
   use the superuser credentials to login to the admin panel
-  ```
+  ``` -->
