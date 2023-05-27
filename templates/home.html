@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proshop API</title>
+    <style>
+      body {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      h2 {
+        margin-top: 30px;
+      }
+
+      .route-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .route-item {
+        margin-bottom: 10px;
+      }
+
+      .route-link {
+        display: inline-block;
+        padding: 5px 10px;
+        color: #000;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .method {
+        margin-right: 10px;
+      }
+
+      .method.get-method {
+        background-color: #4caf50;
+      }
+
+      .method.post-method {
+        background-color: #2196f3;
+      }
+
+      .method.put-method {
+        background-color: #ff9800;
+      }
+
+      .method.delete-method {
+        background-color: #f44336;
+      }
+
+      .route-link:hover {
+        background-color: #ddd;
+      }
+
+      .container {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>API Routes</h1>
+
+      - Some routes are clickable whereas some require authentication. Read the
+      docs for more info. <br />
+
+      <h2>Products</h2>
+      <ul class="route-list">
+        <li class="route-item">
+          <a href="/api/products" class="route-link method get-method">GET</a>
+          <a href="/api/products" class="route-link">/api/products</a>
+        </li>
+        <li class="route-item">
+          <a href="/api/products/top/" class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/products/top/" class="route-link">/api/products/top</a>
+        </li>
+        <li class="route-item">
+          <a
+            href="/api/products/category/electronics/"
+            class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/products/category/home-office/" class="route-link"
+            >/api/products/category/:slug</a
+          >
+        </li>
+        <li class="route-item">
+          <a
+            href="/api/products/subcategory/laptops/"
+            class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/products/subcategory/laptops/" class="route-link"
+            >/api/products/subcategory/:slug</a
+          >
+        </li>
+        <li class="route-item">
+          <a href="/api/products/1" class="route-link method get-method">GET</a>
+          <a href="/api/products/1" class="route-link">/api/products/:pk</a>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method post-method">POST</strong>
+          <span class="route-link">/api/products/create/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method put-method">PUT</strong>
+          <span class="route-link">/api/products/:pk/update/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method delete-method">DELETE</strong>
+          <span class="route-link">/api/products/:pk/delete/</span>
+        </li>
+      </ul>
+
+      <h2>Categories</h2>
+      <ul class="route-list">
+        <li class="route-item">
+          <a href="/api/categories" class="route-link method get-method">GET</a>
+          <a href="/api/categories" class="route-link">/api/categories</a>
+        </li>
+        <li class="route-item">
+          <a href="/api/categories/1" class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/categories/1" class="route-link">/api/categories/:pk</a>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method post-method">POST</strong>
+          <span class="route-link">/api/categories/create/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method put-method">PUT</strong>
+          <span class="route-link">/api/categories/:pk/update/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method delete-method">DELETE</strong>
+          <span class="route-link">/api/categories/:pk/delete/</span>
+        </li>
+        <li class="route-item">
+          <a href="/api/categories/sub/" class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/categories/sub/" class="route-link"
+            >/api/categories/sub</a
+          >
+        </li>
+        <li class="route-item">
+          <a
+            href="/api/categories/hot-categories/"
+            class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/categories/hot-categories/" class="route-link"
+            >/api/categories/hot-categories</a
+          >
+        </li>
+        <li class="route-item">
+          <a href="/api/categories/sub/1" class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/categories/sub/1" class="route-link"
+            >/api/categories/sub/:pk</a
+          >
+        </li>
+        <li class="route-item">
+          <strong class="route-link method post-method">POST</strong>
+          <span class="route-link">/api/categories/sub/create/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method post-method">POST</strong>
+          <span class="route-link">/api/categories/upload/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method put-method">PUT</strong>
+          <span class="route-link">/api/categories/sub/:pk/update/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method delete-method">DELETE</strong>
+          <span class="route-link">/api/categories/sub/:pk/delete/</span>
+        </li>
+      </ul>
+
+      <h2>Orders</h2>
+      <ul class="route-list">
+        <li class="route-item">
+          <a href="/api/orders" class="route-link method get-method">GET</a>
+          <a href="/api/orders" class="route-link">/api/orders</a>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method post-method">POST</strong>
+          <span class="route-link">/api/orders/add/</span>
+        </li>
+        <li class="route-item">
+          <a
+            href="/api/orders/user-orders/"
+            class="route-link method get-method"
+            >GET</a
+          >
+          <a href="/api/orders/user-orders/" class="route-link"
+            >/api/orders/user-orders</a
+          >
+        </li>
+        <li class="route-item">
+          <a href="/api/orders/1" class="route-link method get-method">GET</a>
+          <a href="/api/orders/1" class="route-link">/api/orders/:pk</a>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method put-method">PUT</strong>
+          <span class="route-link">/api/orders/:pk/pay/</span>
+        </li>
+        <li class="route-item">
+          <strong class="route-link method put-method">PUT</strong>
+          <span class="route-link">/api/orders/:pk/deliver/</span>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

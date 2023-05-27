@@ -4,8 +4,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from base.views.api import home
+
 
 urlpatterns = [
+    path('', home, name='home'),
+
     path('api/auth/', include('djoser.urls')),  # third party
     path('api/auth/', include('djoser.urls.jwt')),  # third party
     path('api/auth/', include('djoser.social.urls')),  # third party
