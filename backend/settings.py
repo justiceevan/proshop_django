@@ -207,6 +207,7 @@ DJOSER = {
         'http://localhost:8000/',
         'http://localhost:3000/',
         'https://proshop-eshop.azurewebsites.net/',
+        'https://proshop-eshop.web.app/'
     ],
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserSerializer',
