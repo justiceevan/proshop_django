@@ -206,10 +206,8 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
-        'http://localhost:8000/',
-        'http://localhost:3000/',
-        'https://proshop-eshop.azurewebsites.net/',
-        'https://proshop-eshop.web.app/'
+        'https://proshop-eshop.azurewebsites.net/api/users/google/',
+        'http://localhost:8000/api/users/google/'
     ],
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserSerializer',
@@ -240,4 +238,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True

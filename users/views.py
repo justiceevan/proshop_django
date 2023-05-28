@@ -1,8 +1,8 @@
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
-from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.views.generic import TemplateView
 
 from djoser.conf import settings
 from djoser.compat import get_user_email
@@ -11,8 +11,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework import status
-
 from rest_framework_simplejwt.tokens import RefreshToken
+
+import os
+
 
 from .serializers import UserSerializer
 User = get_user_model()
@@ -79,6 +81,19 @@ def custom_activation_view(request):
             return Response(token, status=status.HTTP_200_OK)
         else:
             return Response({'detail': 'Your token is incorrect'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class GoogleCodeVerificationView(TemplateView):
+    permission_classes = [AllowAny]
+    template_name = 'google_auth.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["redirect_uri"] = os.environ.get("REDIRECT_URL")
+        context['success_redirect_uri'] = os.environ.get(
+            "SUCCESS_GOOGLE_AUTH_CLIENT_REDIRECT_URL")
+
+        return context
 
 
 @api_view(['POST'])
