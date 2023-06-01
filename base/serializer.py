@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Order, OrderItem, ShippingAddress, Review, Category, SubCategory
+from .models import Product, Order, OrderItem, Address, ShippingAddress, Review, Category, SubCategory
 from users.serializers import UserSerializer
 
 
@@ -62,6 +62,12 @@ class ProductSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
+        fields = '__all__'
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
         fields = '__all__'
 
 
