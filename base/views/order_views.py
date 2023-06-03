@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 
-from base.models import Product, Order, OrderItem, ShippingAddress
+from base.models import Product, Order, OrderItem, Address, ShippingAddress
 from base.serializer import OrderSerializer
 
 
@@ -28,13 +28,9 @@ def addOrderItems(request):
             totalPrice=data['totalPrice'],
         )
 
-        shipping = ShippingAddress.objects.create(
-            order=order,
-            address=data['shippingAddress']['address'],
-            city=data['shippingAddress']['city'],
-            postalCode=data['shippingAddress']['postalCode'],
-            country=data['shippingAddress']['country']
-        )
+        address = Address.objects.get(_id=data['address_id'])
+
+        ShippingAddress.objects.create(order=order, address=address)
 
         for orderItem in orderItems:
             product = Product.objects.get(_id=orderItem['productId'])
@@ -48,8 +44,6 @@ def addOrderItems(request):
                 price=orderItem['price'],
                 image=product.image.url
             )
-
-            print(orderItems)
 
             product.countInStock -= item.qty
             product.save()

@@ -72,9 +72,15 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class ShippingAddressSerializer(serializers.ModelSerializer):
+    address = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ShippingAddress
         fields = '__all__'
+
+    def get_address(self, obj):
+        serializer = AddressSerializer(obj.address, many=False)
+        return serializer.data
 
 
 class OrderSerializer(serializers.ModelSerializer):
