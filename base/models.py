@@ -102,14 +102,27 @@ class OrderItem(models.Model):
         return self.name
 
 
-class ShippingAddress(models.Model):
-    order = models.OneToOneField(
-        Order, on_delete=models.CASCADE, null=True, blank=True)
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=200, null=True, blank=True)
-    postalCode = models.CharField(max_length=200, null=True, blank=True)
+    postal_code = models.CharField(max_length=200, null=True, blank=True)
     country = models.CharField(max_length=200, null=True, blank=True)
+    phone_number = models.CharField(max_length=200, null=True, blank=True)
+    is_default = models.BooleanField(default=False)
     _id = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
         return self.address
+
+
+class ShippingAddress(models.Model):
+    order = models.OneToOneField(
+        Order, on_delete=models.CASCADE, null=True, blank=True)
+    address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.address.address

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Product, Order, OrderItem, ShippingAddress, Review, Category, SubCategory
+from .models import Product, Order, OrderItem, Address, ShippingAddress, Review, Category, SubCategory
 from users.serializers import UserSerializer
 
 
@@ -65,10 +65,22 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
 class ShippingAddressSerializer(serializers.ModelSerializer):
+    address = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ShippingAddress
         fields = '__all__'
+
+    def get_address(self, obj):
+        serializer = AddressSerializer(obj.address, many=False)
+        return serializer.data
 
 
 class OrderSerializer(serializers.ModelSerializer):

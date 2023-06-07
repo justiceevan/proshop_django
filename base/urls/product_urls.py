@@ -6,6 +6,7 @@ urlpatterns = [
     path('create/', views.createProduct, name='product-create'),
     path('upload/', views.uploadImage, name='upload-image'),
     path('top/', views.getTopRatedProducts, name='top-products'),
+    path('user/reviews/', views.getUserReviews, name='user-reviews'),
     path('category/<str:slug>/', views.getProductsByCategory,
          name='category-products'),
     path('subcategory/<str:slug>/', views.getProductsBySubCategory,

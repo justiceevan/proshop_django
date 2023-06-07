@@ -1,12 +1,19 @@
 from django.db.models.signals import pre_save
-from django.contrib.auth.models import User
+from base.models import Address
 
 
-def updateUser(sender, instance, **kwargs):
-    user = instance
+def updateDefaultAddress(sender, instance, **kwargs):
+    address = instance
+    user = address.user
 
-    if user.email != '':
-        user.username = user.email
+    # If the address is default, then set all other addresses of the user to not default
+    if address.is_default:
+        querySet = Address.objects.filter(
+            user=user, is_default=True).exclude(_id=address._id)
+        if querySet.exists():
+            for addr in querySet:
+                addr.is_default = False
+                addr.save()
 
 
-pre_save.connect(updateUser, sender=User)
+pre_save.connect(updateDefaultAddress, sender=Address)

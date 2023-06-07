@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework import status
 
 from base.models import Product, Review, SubCategory
-from base.serializer import ProductSerializer
+from base.serializer import ProductSerializer, ReviewSerializer
 
 
 @api_view(['GET'])
@@ -159,6 +159,15 @@ def uploadImage(request):
     return Response(content, status=status.HTTP_202_ACCEPTED)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserReviews(request):
+    user = request.user
+    reviews = user.review_set.all()
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def createProductReview(request, pk):
@@ -181,7 +190,7 @@ def createProductReview(request, pk):
         review = Review.objects.create(
             user=user,
             product=product,
-            name=user.first_name,
+            name=data['name'],
             rating=data['rating'],
             comment=data['comment'],
         )

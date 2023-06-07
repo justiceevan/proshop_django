@@ -121,6 +121,8 @@ def updateUserProfile(request):
 
     user.first_name = data['first_name']
     user.last_name = data['last_name']
+    user.gender = data['gender']
+    user.dob = data['dob']
     user.save()
 
     serializer = UserSerializer(user, many=False)
